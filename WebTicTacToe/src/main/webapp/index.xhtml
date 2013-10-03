@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ace="http://www.icefaces.org/icefaces/components">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h1>Hello!</h1>
+        <ace:panel>
+            <h:form>
+                <ace:textEntry id="nameInput" value="#{playerBean.name}" label="Name" labelPosition="left" required="true" requiredIndicator="*" indicatorPosition="right">
+                    <ace:ajax render="@this nameOutput nameMessage"/>
+                </ace:textEntry>
+            </h:form>
+        </ace:panel>
+        <ace:panel>
+            <h:outputText id="nameOutput" value="Name: #{playerBean.name}"/>
+        </ace:panel>
+    </h:body>
+</html>
+
