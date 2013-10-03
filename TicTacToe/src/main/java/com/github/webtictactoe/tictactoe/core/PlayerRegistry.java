@@ -10,7 +10,7 @@ import java.util.List;
  * @author hajo
  * @author pigmassacre
  */
-public final class PlayerRegistry extends AbstractDAO<Player, Long>
+public final class PlayerRegistry extends AbstractDAO<Player, String>
         implements IPlayerRegistry {
 
     public PlayerRegistry(String puName) {

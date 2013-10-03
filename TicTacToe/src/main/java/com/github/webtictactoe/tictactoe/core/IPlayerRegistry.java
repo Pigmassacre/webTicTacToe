@@ -7,7 +7,7 @@ import java.util.List;
  * Interface to customer registry
  * @author hajo
  */
-public interface IPlayerRegistry extends IDAO<Player, Long> {
+public interface IPlayerRegistry extends IDAO<Player, String> {
 
     List<Player> getAll();
     
