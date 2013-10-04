@@ -48,7 +48,7 @@
         </dependency>
     </dependencies>
 
-    <name>tictactoe</name>
+    <name>TicTacToe</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>

@@ -1,22 +1,25 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ace="http://www.icefaces.org/icefaces/components">
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ace="http://www.icefaces.org/icefaces/components"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:icecore="http://www.icefaces.org/icefaces/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h1>Hello!</h1>
+        <h1>Please choose a username:</h1>
         <ace:panel>
             <h:form>
-                <ace:textEntry id="nameInput" value="#{playerBean.name}" label="Name" labelPosition="left" required="true" requiredIndicator="*" indicatorPosition="right">
-                    <ace:ajax render="@this nameOutput nameMessage"/>
+                <ace:textEntry id="nameInput" value="#{player.name}" label="Name" labelPosition="left" required="true" requiredIndicator="*" indicatorPosition="right">
+                    <ace:ajax render="@this nameOutput"/>
                 </ace:textEntry>
             </h:form>
         </ace:panel>
         <ace:panel>
-            <h:outputText id="nameOutput" value="Name: #{playerBean.name}"/>
+            <h:outputText id="nameOutput" value="Name: #{player.name}"/>
         </ace:panel>
     </h:body>
 </html>

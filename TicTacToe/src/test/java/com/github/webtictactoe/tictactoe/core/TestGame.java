@@ -1,6 +1,5 @@
 package com.github.webtictactoe.tictactoe.core;
 
-import javax.persistence.EntityManagerFactory;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
