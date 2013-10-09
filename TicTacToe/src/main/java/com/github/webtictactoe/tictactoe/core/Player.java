@@ -18,11 +18,21 @@ public class Player extends AbstractEntity {
     @Column
     private Integer score;
     
+    private transient IGame game;
+    
     public Player() {
     }
 
     public Player(String name) {
         super(name);
+    }
+    
+    public void join(IGame g){
+        game = g;
+    }
+    
+    public void leave(){
+        game = null;
     }
     
     public Integer getScore() {
