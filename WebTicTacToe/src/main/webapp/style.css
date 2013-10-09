@@ -1,0 +1,24 @@
+/* 
+    Document   : style
+    Created on : Oct 9, 2013, 2:20:03 PM
+    Author     : pigmassacre
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#loginPanel {
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+#loginForm {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+

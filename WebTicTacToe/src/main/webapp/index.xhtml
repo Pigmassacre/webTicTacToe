@@ -7,19 +7,17 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:icecore="http://www.icefaces.org/icefaces/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>WebTicTacToe</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
     </h:head>
     <h:body>
-        <h1>Please choose a username:</h1>
-        <ace:panel>
-            <h:form>
+        <ace:panel id="loginPanel">
+            <h1>Choose a username to login:</h1>
+            <h:form id="loginForm">
                 <ace:textEntry id="nameInput" value="#{player.name}" label="Name" labelPosition="left" required="true" requiredIndicator="*" indicatorPosition="right">
-                    <ace:ajax render="@this nameOutput"/>
+                    <icecore:defaultAction action="#{lobby.login}" key="Enter"/>
                 </ace:textEntry>
             </h:form>
-        </ace:panel>
-        <ace:panel>
-            <h:outputText id="nameOutput" value="Name: #{player.name}"/>
         </ace:panel>
     </h:body>
 </html>
