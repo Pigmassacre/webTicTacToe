@@ -11,8 +11,8 @@ public class GameFactory {
     }
 
     // If initTestData there will be some data to use
-    public static IGame getGame(String persistenceUnitName) {
-        return new Game(persistenceUnitName);
+    public static IGame getGame(String persistenceUnitName, int size) {
+        return new Game(persistenceUnitName, size);
     }
 
 }

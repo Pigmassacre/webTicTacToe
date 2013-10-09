@@ -10,15 +10,41 @@ import java.util.logging.Logger;
  *
  * @author hajo
  */
+
+
 public class Game implements IGame {
 
+
+
+    public enum Mark {
+        EMPTY, CROSS, CIRCLE
+    }
+    
+    private Mark[][] board;
+    
     private IPlayerRegistry playerRegistry;    
 
-    public Game(String persistenceUnitName) {
+    public Game(String persistenceUnitName, int size) {
+        board = new Mark[size][size];
         playerRegistry = new PlayerRegistry(persistenceUnitName);
         Logger.getAnonymousLogger().log(Level.INFO, "Game alive: {0}", this.hashCode());
     }
 
+    @Override
+    public void move(Player p, int x, int y) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Player getActivePlayer() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Mark[][] getBoard() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     public IPlayerRegistry getPlayerRegistry() {
         return playerRegistry;
