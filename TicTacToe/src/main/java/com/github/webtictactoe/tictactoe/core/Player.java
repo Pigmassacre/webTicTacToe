@@ -18,7 +18,7 @@ public class Player extends AbstractEntity {
     @Column
     private Integer score;
     
-    private transient IGame game;
+    private Game.Mark mark;
     
     public Player() {
     }
@@ -27,20 +27,20 @@ public class Player extends AbstractEntity {
         super(name);
     }
     
-    public void join(IGame g){
-        game = g;
-    }
-    
-    public void leave(){
-        game = null;
-    }
-    
     public Integer getScore() {
         return score;
     }
     
     public void setScore(Integer score) {
         this.score = score;
+    }
+    
+    public Game.Mark getMark(){
+        return mark;
+    }
+    
+    public void setMark(Game.Mark mark){
+        this.mark = mark;
     }
 
     @Override

@@ -5,15 +5,13 @@ package com.github.webtictactoe.tictactoe.core;
  * @author hajo
  */
 public interface IGame {
-
-    public IPlayerRegistry getPlayerRegistry();
     
-    public void move(Player p, int x, int y);
+    public void move(int x, int y, Game.Mark mark);
     
-    public Player getActivePlayer();
+    public boolean isFree(int x,int y);
     
     public Game.Mark[][] getBoard();
     
-    
+    public boolean gameWon();
 
 }

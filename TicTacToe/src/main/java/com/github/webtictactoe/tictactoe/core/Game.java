@@ -16,41 +16,35 @@ public class Game implements IGame {
 
 
 
+
+
     public enum Mark {
         EMPTY, CROSS, CIRCLE
     }
     
     private Mark[][] board;
-    
-    private IPlayerRegistry playerRegistry;    
-
-    public Game(String persistenceUnitName, int size) {
+    public Game(int size) {
         board = new Mark[size][size];
-        playerRegistry = new PlayerRegistry(persistenceUnitName);
         Logger.getAnonymousLogger().log(Level.INFO, "Game alive: {0}", this.hashCode());
     }
 
     @Override
-    public void move(Player p, int x, int y) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean isFree(int x, int y) {
+        return board[x][y].equals(Mark.EMPTY);
     }
-
+    
     @Override
-    public Player getActivePlayer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void move(int x, int y, Game.Mark mark) {
+        board[x][y] = mark;
     }
 
     @Override
     public Mark[][] getBoard() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return board;
     }
     
     @Override
-    public IPlayerRegistry getPlayerRegistry() {
-        return playerRegistry;
-    }
-    
-    private boolean gameWon(){
+    public boolean gameWon(){
         Mark mark;
         boolean won = true;
         //Check Rows

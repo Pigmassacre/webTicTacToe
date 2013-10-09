@@ -13,20 +13,34 @@ import java.util.List;
  */
 public class Lobby {
     
-    public List<Player> playerList = new ArrayList();
+    public List<Player> onlinePlayerList = new ArrayList();
     
+    PlayerRegistry playerRegistry;
+    
+    public Lobby(String persistenceUnitName){
+        playerRegistry = new PlayerRegistry(persistenceUnitName);
+    }
     
     public List<Player> getPlayerList() {
-        return playerList;
+        return onlinePlayerList;
     }
     
-    public void addPlayer(Player p) {
-        playerList.add(p);
+    public void login(String name){
+        Player p = playerRegistry.find(name);
+        if(p != null)
+            onlinePlayerList.add(p);
     }
     
-    public void removePlayer(Player p) {
-        playerList.remove(p);
+    public void logout(String name) {
+        Player p = playerRegistry.find(name);
+        if(p != null)
+            onlinePlayerList.remove(p);
     }
+    
+    public List<Player> getOnlinePlayers(){
+        return onlinePlayerList;
+    }
+    
     
     /**
      * findGame creates a game and 
@@ -36,14 +50,12 @@ public class Lobby {
      */
     public void findGame(Player p1, int size) {
         
-        playerList.remove(p1);
+        onlinePlayerList.remove(p1);
         
-        if(!playerList.isEmpty()){
-            Player p2 = playerList.get(0);
-            IGame game = GameFactory.getGame(null, size);
+        if(!onlinePlayerList.isEmpty()){
+            Player p2 = onlinePlayerList.get(0);
             
-            p1.join(game);
-            p2.join(game);
+            
         }
     }
     
