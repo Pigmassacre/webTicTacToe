@@ -12,7 +12,7 @@ public class TestGame {
 
     @Before // Run before each test to reset
     public void before() {
-        game = GameFactory.getGame(GAME_PU, 3);
+       //game = GameFactory.getGame(GAME_PU, 3);
     }
 
     @Test

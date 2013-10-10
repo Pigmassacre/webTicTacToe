@@ -18,13 +18,17 @@ public class Player extends AbstractEntity {
     @Column
     private Integer score;
     
+    @Column
+    private String password;
+    
     private Game.Mark mark;
     
     public Player() {
     }
 
-    public Player(String name) {
+    public Player(String name, String password) {
         super(name);
+        this.password = password;
     }
     
     public Integer getScore() {
@@ -41,6 +45,10 @@ public class Player extends AbstractEntity {
     
     public void setMark(Game.Mark mark){
         this.mark = mark;
+    }
+    
+    public String getPassword(){
+        return password;
     }
 
     @Override

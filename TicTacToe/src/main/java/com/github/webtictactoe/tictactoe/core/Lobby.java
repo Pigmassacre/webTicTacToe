@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class Lobby {
     
-    public List<Player> onlinePlayerList = new ArrayList();
+    private List<Player> onlinePlayerList = new ArrayList();
+    private List<GameSession> activeGames = new ArrayList();
     
     PlayerRegistry playerRegistry;
     
@@ -25,10 +26,16 @@ public class Lobby {
         return onlinePlayerList;
     }
     
-    public void login(String name){
+    public void register(String name, String password){
+        playerRegistry.add(new Player(name, password));
+    }
+    
+    public void login(String name, String password){
         Player p = playerRegistry.find(name);
-        if(p != null)
-            onlinePlayerList.add(p);
+        if(p != null){
+            if(password.equals(p.getPassword()))
+                onlinePlayerList.add(p);
+        }
     }
     
     public void logout(String name) {
@@ -44,7 +51,7 @@ public class Lobby {
     
     /**
      * findGame creates a game and 
-     * forces another player to join p1
+     * forces another player to join p1 and something
      * @param p1 player that want to join a game
      * @param size Size of the board
      */
@@ -54,8 +61,7 @@ public class Lobby {
         
         if(!onlinePlayerList.isEmpty()){
             Player p2 = onlinePlayerList.get(0);
-            
-            
+            activeGames.add(new GameSession(new Game(size),p1, p2));
         }
     }
     

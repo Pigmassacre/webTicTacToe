@@ -18,7 +18,7 @@ public class GameSession {
     
     public GameSession(IGame g, Player p1, Player p2){
         game = g;
-        this.p1 = p1 = activePlayer;
+        this.p1 = activePlayer = p1;
         p1.setMark(Game.Mark.CROSS);
         this.p2 = p2;
         p2.setMark(Game.Mark.CIRCLE);
