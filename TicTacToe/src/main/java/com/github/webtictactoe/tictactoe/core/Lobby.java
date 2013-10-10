@@ -51,7 +51,7 @@ public class Lobby {
     
     /**
      * findGame creates a game and 
-     * forces another player to join p1
+     * forces another player to join p1 and something
      * @param p1 player that want to join a game
      * @param size Size of the board
      */
