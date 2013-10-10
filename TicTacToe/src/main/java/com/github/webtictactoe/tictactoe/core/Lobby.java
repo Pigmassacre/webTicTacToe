@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author emileriksson
  */
-public class Lobby {
+public class Lobby implements ILobby {
     
     private List<Player> onlinePlayerList = new ArrayList();
     private List<GameSession> activeGames = new ArrayList();
@@ -22,14 +22,17 @@ public class Lobby {
         playerRegistry = new PlayerRegistry(persistenceUnitName);
     }
     
+    @Override
     public List<Player> getPlayerList() {
         return onlinePlayerList;
     }
     
+    @Override
     public void register(String name, String password){
         playerRegistry.add(new Player(name, password));
     }
     
+    @Override
     public void login(String name, String password){
         Player p = playerRegistry.find(name);
         if(p != null){
@@ -38,12 +41,14 @@ public class Lobby {
         }
     }
     
+    @Override
     public void logout(String name) {
         Player p = playerRegistry.find(name);
         if(p != null)
             onlinePlayerList.remove(p);
     }
     
+    @Override
     public List<Player> getOnlinePlayers(){
         return onlinePlayerList;
     }
@@ -55,6 +60,7 @@ public class Lobby {
      * @param p1 player that want to join a game
      * @param size Size of the board
      */
+    @Override
     public void findGame(Player p1, int size) {
         
         onlinePlayerList.remove(p1);
