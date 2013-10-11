@@ -23,7 +23,24 @@ public class TestGame {
         // No players should be online initially
         assertTrue(lobby.getOnlinePlayers().size() == 0);
         
+        Player p1 = new Player("p1", "123");
+        lobby.register("p1","123");
+        lobby.login("p1","123");
         
+        // One player should be online
+        assertTrue(lobby.getOnlinePlayers().size() == 1);
+        
+        Player p2 = new Player("p2", "123");
+        lobby.register("p2","123");
+        lobby.login("p2","123");
+        
+        // Two player should be online
+        assertTrue(lobby.getOnlinePlayers().size() == 2);
+        
+        lobby.logout("p2");
+        
+        // One player should be online
+        assertTrue(lobby.getOnlinePlayers().size() == 1);
     }
 /*
     @Test
