@@ -30,10 +30,12 @@ public class Lobby implements ILobby {
     @Override
     public void login(String name, String password){
         Player p = playerRegistry.find(name);
-        if(p != null){
-            if(password.equals(p.getPassword()))
-                onlinePlayerList.add(p);
-        }
+        
+        if(p != null &&
+           password.equals(p.getPassword()) &&
+           !onlinePlayerList.contains(p))
+           
+           onlinePlayerList.add(p);
     }
     
     @Override

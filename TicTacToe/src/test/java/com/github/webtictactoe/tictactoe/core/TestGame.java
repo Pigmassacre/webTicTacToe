@@ -1,5 +1,10 @@
 package com.github.webtictactoe.tictactoe.core;
 
+/*
+ * @author antonwestberg
+ * @author pigmassacre
+ */
+
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,15 +46,25 @@ public class TestGame {
         
         // One player should be online
         assertTrue(lobby.getOnlinePlayers().size() == 1);
+        
+        //Try to login twice
+        lobby.login("p1","123");
+        
+        // One player should be online
+        assertTrue(lobby.getOnlinePlayers().size() == 1);
+        
+        //Wrong password - TODO
+        //lobby.login("p2","000");
+        //assertTrue(lobby.getOnlinePlayers().size() == 1);
     }
-/*
+
     @Test
     public void testPlayerRegistryAdd() {
         // Add
-        IPlayerRegistry playerRegistry = game.getPlayerRegistry();
+        IPlayerRegistry playerRegistry = new PlayerRegistry(GAME_PU);
         
-        Player one = new Player("One");
-        Player two = new Player("Two");
+        Player one = new Player("One", "123");
+        Player two = new Player("Two", "123");
         
         playerRegistry.add(one);
         playerRegistry.add(two);
@@ -60,8 +75,8 @@ public class TestGame {
         playerRegistry.remove(one.getName());
         playerRegistry.remove(two.getName());
         
-        Player three = new Player("Three");
-        Player four = new Player("Four");
+        Player three = new Player("Three", "123");
+        Player four = new Player("Four", "123");
         
         playerRegistry.add(three);
         playerRegistry.add(four);
@@ -77,8 +92,8 @@ public class TestGame {
         assertTrue(playerRegistry.getAll().isEmpty());
         
         // Update
-        Player five = new Player("Five");
-        Player six = new Player("Six");
+        Player five = new Player("Five", "123");
+        Player six = new Player("Six", "123");
         
         five.setScore(100);
         six.setScore(500);
@@ -92,5 +107,5 @@ public class TestGame {
         playerRegistry.update(five);
         playerRegistry.update(six);
     }
-*/
+
 }

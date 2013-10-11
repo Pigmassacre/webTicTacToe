@@ -55,4 +55,5 @@ public class Player extends AbstractEntity {
     public String toString() {
         return "Player{" + "name=" + getName() + "}";
     }
+
 }
