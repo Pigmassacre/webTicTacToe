@@ -12,9 +12,9 @@ public interface ILobby {
     
     public void register(String name, String password);
     
-    public void login(String name, String password);
+    public Boolean login(String name, String password);
     
-    public void logout(String name);
+    public Boolean logout(String name);
     
     public List<Player> getOnlinePlayers();
     

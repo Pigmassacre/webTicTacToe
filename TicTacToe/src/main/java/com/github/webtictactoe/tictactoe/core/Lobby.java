@@ -33,19 +33,26 @@ public class Lobby implements ILobby {
     }
     
     @Override
-    public void login(String name, String password){
+    public Boolean login(String name, String password){
         Player p = playerRegistry.find(name);
         if(p != null){
             if(password.equals(p.getPassword()))
                 onlinePlayerList.add(p);
+                return true;
         }
+        // If the login fails, we return false.
+        return false;
     }
     
     @Override
-    public void logout(String name) {
+    public Boolean logout(String name) {
         Player p = playerRegistry.find(name);
-        if(p != null)
+        if(p != null) {
             onlinePlayerList.remove(p);
+            return true;
+        }
+        // If the logout fails for some reason, we return false.
+        return false;
     }
     
     @Override
