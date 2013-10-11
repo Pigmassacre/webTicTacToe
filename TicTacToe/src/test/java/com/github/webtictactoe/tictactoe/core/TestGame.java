@@ -77,6 +77,30 @@ public class TestGame {
         assertTrue(lobby.getActiveGames().size() == 1);
         
     }
+    
+    //@Test
+    public void testMove(){
+        Player p1 = new Player("p1", "123");
+        Player p2 = new Player("p2", "123");
+        IGame g = new Game(3);
+        GameSession session = new GameSession( g, p1, p2);
+        
+        //Make sure board is empty
+        
+        //p1 marks 0.0
+        
+        //p2 marks 0.0 - fails, already marked
+        
+        //p1 marks 0.1 - fails, still p2's turn
+        
+        //p2 marks 0.1
+        
+        //Check the board, should be cross at 0.0, circle at
+        // 0.1, empty everywhere else
+    }
+    
+    //@Test
+    public  void testWin(){}
 
     //@Test
     public void testPlayerRegistryAdd() {
