@@ -8,8 +8,6 @@ import java.util.List;
  */
 public interface ILobby {
     
-    public List<Player> getPlayerList();
-    
     public void register(String name, String password);
     
     public void login(String name, String password);

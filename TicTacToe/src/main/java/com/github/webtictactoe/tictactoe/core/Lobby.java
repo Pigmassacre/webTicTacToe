@@ -22,12 +22,6 @@ public class Lobby implements ILobby {
         playerRegistry = new PlayerRegistry(persistenceUnitName);
     }
     
-    //Unnecessary
-    @Override
-    public List<Player> getPlayerList() {
-        return onlinePlayerList;
-    }
-    
     @Override
     public void register(String name, String password){
         playerRegistry.add(new Player(name, password));
