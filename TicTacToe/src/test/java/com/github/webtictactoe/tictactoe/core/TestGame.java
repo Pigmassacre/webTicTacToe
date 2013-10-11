@@ -9,12 +9,23 @@ public class TestGame {
     static IGame game;
     final static String GAME_PU = "game_pu";
     final static String GAME_TEST_PU = "game_test_pu";
+    
+    static Lobby lobby;
 
     @Before // Run before each test to reset
     public void before() {
-       //game = GameFactory.getGame(GAME_PU, 3);
+        lobby = new Lobby(GAME_PU);
     }
-
+    
+    @Test
+    public void testLogin(){
+        
+        // No players should be online initially
+        assertTrue(lobby.getOnlinePlayers().size() == 0);
+        
+        
+    }
+/*
     @Test
     public void testPlayerRegistryAdd() {
         // Add
@@ -64,5 +75,5 @@ public class TestGame {
         playerRegistry.update(five);
         playerRegistry.update(six);
     }
-
+*/
 }

@@ -22,6 +22,7 @@ public class Lobby implements ILobby {
         playerRegistry = new PlayerRegistry(persistenceUnitName);
     }
     
+    //Unnecessary
     @Override
     public List<Player> getPlayerList() {
         return onlinePlayerList;
