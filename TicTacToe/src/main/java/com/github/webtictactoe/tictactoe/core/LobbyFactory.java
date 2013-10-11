@@ -8,12 +8,17 @@ package com.github.webtictactoe.tictactoe.core;
  */
 public class LobbyFactory {
     
+    // Lobby should be a singleton
+    private static Lobby INSTANCE;
+    
     private LobbyFactory() {
         
     }
     
     public static Lobby getLobby(String persistenceUnitName) {
-        return new Lobby(persistenceUnitName);
+        if(INSTANCE == null )
+            INSTANCE = new Lobby(persistenceUnitName);
+        return INSTANCE;
     }
     
 }

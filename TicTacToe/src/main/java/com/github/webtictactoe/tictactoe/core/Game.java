@@ -14,10 +14,6 @@ import java.util.logging.Logger;
 
 public class Game implements IGame {
 
-
-
-
-
     public enum Mark {
         EMPTY, CROSS, CIRCLE
     }

@@ -23,11 +23,6 @@ public class Lobby implements ILobby {
     }
     
     @Override
-    public List<Player> getPlayerList() {
-        return onlinePlayerList;
-    }
-    
-    @Override
     public void register(String name, String password){
         playerRegistry.add(new Player(name, password));
     }
@@ -35,12 +30,14 @@ public class Lobby implements ILobby {
     @Override
     public Boolean login(String name, String password){
         Player p = playerRegistry.find(name);
-        if(p != null){
-            if(password.equals(p.getPassword()))
-                onlinePlayerList.add(p);
-                return true;
+        
+        if(p != null &&
+           password.equals(p.getPassword()) &&
+           !onlinePlayerList.contains(p)) {
+           onlinePlayerList.add(p);
+           return true;
         }
-        // If the login fails, we return false.
+        // We return false if the login fails for any reason.
         return false;
     }
     
@@ -51,13 +48,17 @@ public class Lobby implements ILobby {
             onlinePlayerList.remove(p);
             return true;
         }
-        // If the logout fails for some reason, we return false.
+        // We return false if the logout fails for any reason.
         return false;
     }
     
     @Override
     public List<Player> getOnlinePlayers(){
         return onlinePlayerList;
+    }
+    
+    public List<GameSession> getActiveGames(){
+        return activeGames;
     }
     
     
@@ -73,7 +74,7 @@ public class Lobby implements ILobby {
         onlinePlayerList.remove(p1);
         
         if(!onlinePlayerList.isEmpty()){
-            Player p2 = onlinePlayerList.get(0);
+            Player p2 = onlinePlayerList.remove(0);
             activeGames.add(new GameSession(new Game(size),p1, p2));
         }
     }
