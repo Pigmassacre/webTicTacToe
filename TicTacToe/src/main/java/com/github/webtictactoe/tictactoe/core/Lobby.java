@@ -50,6 +50,10 @@ public class Lobby implements ILobby {
         return onlinePlayerList;
     }
     
+    public List<GameSession> getActiveGames(){
+        return activeGames;
+    }
+    
     
     /**
      * findGame creates a game and 
@@ -63,7 +67,7 @@ public class Lobby implements ILobby {
         onlinePlayerList.remove(p1);
         
         if(!onlinePlayerList.isEmpty()){
-            Player p2 = onlinePlayerList.get(0);
+            Player p2 = onlinePlayerList.remove(0);
             activeGames.add(new GameSession(new Game(size),p1, p2));
         }
     }

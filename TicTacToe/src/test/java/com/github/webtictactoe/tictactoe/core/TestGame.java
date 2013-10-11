@@ -16,13 +16,15 @@ public class TestGame {
     final static String GAME_TEST_PU = "game_test_pu";
     
     static Lobby lobby;
+    static PlayerRegistry playerRegistry;
 
     @Before // Run before each test to reset
     public void before() {
         lobby = new Lobby(GAME_PU);
+        playerRegistry = new PlayerRegistry(GAME_PU);
     }
     
-    @Test
+    //@Test
     public void testLogin(){
         
         // No players should be online initially
@@ -57,11 +59,27 @@ public class TestGame {
         //lobby.login("p2","000");
         //assertTrue(lobby.getOnlinePlayers().size() == 1);
     }
+    
+    //@Test 
+    public void testCreateGame(){
+        Player p1 = new Player("p1", "123");
+        lobby.register("p1","123");
+        lobby.login("p1","123");
+        
+        Player p2 = new Player("p2", "123");
+        lobby.register("p2","123");
+        lobby.login("p2","123");
+        
+        assertTrue(lobby.getOnlinePlayers().size() == 2);
+        lobby.findGame(p1, 3);
+        
+        assertTrue(lobby.getOnlinePlayers().size() == 0);
+        assertTrue(lobby.getActiveGames().size() == 1);
+        
+    }
 
-    @Test
+    //@Test
     public void testPlayerRegistryAdd() {
-        // Add
-        IPlayerRegistry playerRegistry = new PlayerRegistry(GAME_PU);
         
         Player one = new Player("One", "123");
         Player two = new Player("Two", "123");
