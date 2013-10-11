@@ -1,14 +1,12 @@
 $(function () {
     "use strict";
 
+    var userlist = $('#userlist');
     var content = $('#content');
-    var input = $('#input');
-    var status = $('#status');
-    var myName = false;
-    var author = null;
-    var logged = false;
+    var name = $('#name'); 
+    var password = $('#password'); // Yes yes, terribly unsafe and stupid... :P
     var socket = $.atmosphere;
-    var request = { url: document.location.toString() + 'chat',
+    var loginRequest = { url: document.location.toString() + 'chat',
                     contentType : "application/json",
                     logLevel : 'debug',
                     transport : 'websocket' ,
@@ -16,13 +14,14 @@ $(function () {
                     fallbackTransport: 'long-polling'};
 
 
-    request.onOpen = function(response) {
+    loginRequest.onOpen = function(response) {
+        userlist.html($('<p>', { text: 'A list of users will appear here when you have logged in.' }));
         content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
-        input.removeAttr('disabled').focus();
-        status.text('Choose name:');
+        name.removeAttr('disabled').focus();
+        password.removeAttr('disabled').focus();
     };
 
-    request.onMessage = function (response) {
+    loginRequest.onMessage = function (response) {
         var message = response.responseBody;
         try {
             var json = jQuery.parseJSON(message);
@@ -31,51 +30,27 @@ $(function () {
             return;
         }
 
-        input.removeAttr('disabled').focus();
-        if (!logged) {
-            logged = true;
-            status.text(myName + ': ').css('color', 'blue');
-        } else {
-            var me = json.author == author;
-            var date =  typeof(json.time) == 'string' ? parseInt(json.time) : json.time;
-            addMessage(json.author, json.text, me ? 'blue' : 'black', new Date(date));
-        }
+        alert(json.keys());
+        $('#login-name').hide();
+        $('#login-password').hide();
+        // TODO
     };
 
-    request.onClose = function(response) {
-        logged = false;
-    }
-
-    request.onError = function(response) {
+    loginRequest.onError = function(response) {
         content.html($('<p>', { text: 'Sorry, but there\'s some problem with your '
             + 'socket or the server is down' }));
     };
 
-    var subSocket = socket.subscribe(request);
+    var subSocket = socket.subscribe(loginRequest);
 
-    input.keydown(function(e) {
+    password.keydown(function(e) {
         if (e.keyCode === 13) {
-            var msg = $(this).val();
-
-            // First message is always the author's name
-            if (author == null) {
-                author = msg;
-            }
-
-            subSocket.push(jQuery.stringifyJSON({ author: author, message: msg }));
-            $(this).val('');
-
-            input.attr('disabled', 'disabled');
-            if (myName === false) {
-                myName = msg;
-            }
+            var givenName = name.val();
+            var givenPassword = password.val();
+            
+            // Pushes the name and password to the server.
+            subSocket.push(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
         }
     });
 
-    function addMessage(author, message, color, datetime) {
-        content.append('<p><span style="color:' + color + '">' + author + '</span> @ ' +
-            + (datetime.getHours() < 10 ? '0' + datetime.getHours() : datetime.getHours()) + ':'
-            + (datetime.getMinutes() < 10 ? '0' + datetime.getMinutes() : datetime.getMinutes())
-            + ': ' + message + '</p>');
-    }
 });

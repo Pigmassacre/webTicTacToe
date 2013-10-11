@@ -1,21 +1,20 @@
 package com.github.webtictactoe.webtictactoe;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
 
 @XmlRootElement
-public class Response {
+public class Userlist {
 
-    public String text;
-    public String author;
-    public long time;
+    public List<String> names;
 
-    public Response(String author, String text) {
-        this.author = author;
-        this.text = text;
-        this.time = new Date().getTime();
+    public Userlist() {
+        this.names = new ArrayList<String>();
+    }
+    
+    public void addUsername(String name) {
+        this.names.add(name);
     }
 
-    public Response() {
-    }
 }

@@ -1,21 +1,20 @@
 package com.github.webtictactoe.webtictactoe;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Date;
 
 @XmlRootElement
-public class Response {
+public class LoginResponse {
 
-    public String text;
-    public String author;
-    public long time;
+    public String message;
+    public Boolean success;
 
-    public Response(String author, String text) {
-        this.author = author;
-        this.text = text;
-        this.time = new Date().getTime();
+    public LoginResponse(String message, Boolean success) {
+        this.message = message;
+        this.success = success;
     }
 
-    public Response() {
+    public LoginResponse() {
+        
     }
+    
 }

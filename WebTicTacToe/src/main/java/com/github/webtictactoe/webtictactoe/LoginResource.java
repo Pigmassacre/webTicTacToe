@@ -1,26 +1,24 @@
 package com.github.webtictactoe.webtictactoe;
 
+import com.github.webtictactoe.tictactoe.core.ILobby;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
-import org.atmosphere.cpr.AtmosphereResourceEvent;
-import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import org.atmosphere.cpr.AtmosphereResourceEvent;
+import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 
-/**
- * Simple chat resource demonstrating the power of Atmosphere. This resource supports transport like WebSocket, Streaming, JSONP and Long-Polling.
- *
- * @author Jeanfrancois Arcand
- */
 @Path("/")
-@AtmosphereService (broadcaster = JerseyBroadcaster.class)
-public class LobbyResource {
-
+@AtmosphereService(broadcaster = JerseyBroadcaster.class)
+public class LoginResource {
+    
+    private ILobby lobby = Lobby.INSTANCE.getLobby();
+    
     /**
      * Suspend the response without writing anything back to the client.
      *
@@ -29,7 +27,7 @@ public class LobbyResource {
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @GET
     public String suspend() {
-        System.out.println("suspend() called");
+
         return "";
     }
 
@@ -43,7 +41,6 @@ public class LobbyResource {
     @POST
     @Produces("application/json")
     public Response broadcast(Message message) {
-        System.out.println("broadcast() called: message received: " + message.author + " says " + message.message);
         return new Response(message.author, message.message);
     }
 
@@ -56,5 +53,22 @@ public class LobbyResource {
             System.out.println(event);
         }
     }
-
+    /*
+    @POST
+    @Produces("application/json")
+    public LoginResponse login(LoginMessage loginMessage) {
+        String message;
+        Boolean success = lobby.login(loginMessage.name, loginMessage.password);
+        
+        System.out.println("login() called");
+        
+        if(success) {
+            message = "Login failed, username or password does not match.";
+        } else {
+            message = "Login succeeded!";
+        }
+        
+        return new LoginResponse(message, success);
+    }
+    */
 }
