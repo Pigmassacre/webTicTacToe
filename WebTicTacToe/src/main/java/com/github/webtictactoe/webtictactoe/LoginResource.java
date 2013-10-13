@@ -1,6 +1,7 @@
 package com.github.webtictactoe.webtictactoe;
 
 import com.github.webtictactoe.tictactoe.core.ILobby;
+import javax.ws.rs.Consumes;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
@@ -25,10 +26,11 @@ public class LoginResource {
         return "";
     }
     
-    @Broadcast(writeEntity = false)
+    //@Broadcast(writeEntity = false
     @POST
+    @Consumes("application/json")
     @Produces("application/json")
-    public LoginResponse broadcast(LoginMessage loginMessage) {
+    public LoginResponse login(LoginMessage loginMessage) {
         String message;
         Boolean success;
         

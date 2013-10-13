@@ -50,8 +50,23 @@ $(function () {
             var givenPassword = password.val();
             
             // Pushes the name and password to the server.
-            subSocket.push(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
+            //subSocket.push(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
+            jQuery.ajax({url: loginRequest.url,
+                                      type: 'POST',
+                                      data: jQuery.stringifyJSON({ name: givenName, password: givenPassword }),
+                                      contentType: 'application/json',
+                                      dataType: 'json',
+                                      success: onLoginResponse
+            });
         }
     });
+    
+    function onLoginResponse(data) {
+        if (data.success === 'true') {
+            $('#login-name').hide();
+            $('#login-password').hide();
+        }
+        content.html($('<p>', { text: data.message }));
+    };
 
 });
