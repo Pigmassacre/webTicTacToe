@@ -8,9 +8,12 @@ import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.NewCookie;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 
@@ -20,13 +23,12 @@ public class LoginResource {
     
     private ILobby lobby = Lobby.INSTANCE.getLobby();
     
-    @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @GET
+    @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     public String suspend() {
         return "";
     }
     
-    //@Broadcast(writeEntity = false
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -45,6 +47,7 @@ public class LoginResource {
                 success = lobby.register(loginMessage.name, loginMessage.password);
                 
                 if (success) {
+                    lobby.login(loginMessage.name, loginMessage.password);
                     message = "Registration succeeded!";
                 } else {
                     message = "That password doesn't match that username, try again!";

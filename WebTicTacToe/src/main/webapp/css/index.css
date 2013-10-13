@@ -61,3 +61,12 @@ div {
     padding: 5px;
     width: 400px;
 }
+
+#user-controls {
+    display: none;
+}
+
+#logout {
+    display: block;
+    float: right;
+}

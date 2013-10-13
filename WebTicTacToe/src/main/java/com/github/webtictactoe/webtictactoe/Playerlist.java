@@ -5,11 +5,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Userlist {
+public class Playerlist {
 
     public List<String> names;
 
-    public Userlist() {
+    public Playerlist() {
         this.names = new ArrayList<String>();
     }
     
