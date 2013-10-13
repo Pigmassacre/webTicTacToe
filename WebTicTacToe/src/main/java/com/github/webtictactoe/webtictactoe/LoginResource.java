@@ -30,23 +30,29 @@ public class LoginResource {
     @Produces("application/json")
     public LoginResponse broadcast(LoginMessage loginMessage) {
         String message;
-        Boolean success = lobby.login(loginMessage.name, loginMessage.password);
+        Boolean success;
         
         System.out.println("login() called with data: " + loginMessage.name + " / " + loginMessage.password);
-        
-        if(success) {
-            message = "Login succeeded!";
-        } else {
-            // Login failed, so we try to register a new user with these credentials instead.
-            success = lobby.register(loginMessage.name, loginMessage.password);
-            
-            if (success) {
-                message = "Registration succeeded!";
+        if (!loginMessage.name.isEmpty() && !loginMessage.password.isEmpty()) {
+            // As long as the name and password aren't empty, we try to login.
+            success = lobby.login(loginMessage.name, loginMessage.password);
+            if(success) {
+                message = "Login succeeded!";
             } else {
-                message = "That password doesn't match that username, try again!";
+                // Login failed, so we try to register a new user with these credentials instead.
+                success = lobby.register(loginMessage.name, loginMessage.password);
+                
+                if (success) {
+                    message = "Registration succeeded!";
+                } else {
+                    message = "That password doesn't match that username, try again!";
+                }
             }
+        } else {
+            // If the name and / or password is empty, the user is denied registration.
+            message = "Name and/or password cannot be empty!";
+            success = false;
         }
-        
         return new LoginResponse(message, success);
     }
     
@@ -59,5 +65,5 @@ public class LoginResource {
             System.out.println(event);
         }
     }
- 
+    
 }

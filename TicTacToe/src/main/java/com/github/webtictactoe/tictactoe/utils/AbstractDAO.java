@@ -78,14 +78,25 @@ public abstract class AbstractDAO<T, K> implements IDAO<T, K> {
     @Override
     public List<T> getRange(int first, int nItems) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
+        
         List<T> result = entityManager.createQuery("SELECT p FROM " + clazz.getSimpleName() + " p").getResultList();
+        
+        // We make sure to close the entityManager before we return anything.
+        entityManager.close();
+        
         return result.subList(first, nItems);
     }
 
     @Override
     public int getCount() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return ((Long) entityManager.createQuery("SELECT COUNT(c) FROM " + clazz.getSimpleName() + " c").getSingleResult()).intValue();
+        
+        int count = ((Long) entityManager.createQuery("SELECT COUNT(c) FROM " + clazz.getSimpleName() + " c").getSingleResult()).intValue();
+        
+        // We make sure to close the entityManager before we return the count.
+        entityManager.close();
+        
+        return count;
     }
 
 }

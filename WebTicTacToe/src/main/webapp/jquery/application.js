@@ -29,12 +29,12 @@ $(function () {
             console.log('This doesn\'t look like a valid JSON: ', message);
             return;
         }
-
-        $('#login-name').hide();
-        $('#login-password').hide();
         
-        
-        userlist.html($('<p>', { text: message }));
+        if (json.success === 'true') {
+            $('#login-name').hide();
+            $('#login-password').hide();
+        }
+        content.html($('<p>', { text: json.message }));
     };
 
     loginRequest.onError = function(response) {
@@ -48,8 +48,6 @@ $(function () {
         if (e.keyCode === 13) {
             var givenName = name.val();
             var givenPassword = password.val();
-            
-            alert(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
             
             // Pushes the name and password to the server.
             subSocket.push(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
