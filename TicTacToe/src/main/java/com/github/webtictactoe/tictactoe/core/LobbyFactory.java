@@ -9,16 +9,14 @@ package com.github.webtictactoe.tictactoe.core;
 public class LobbyFactory {
     
     // Lobby should be a singleton
-    private static Lobby INSTANCE;
+    // I agree, but it is accessed as a singleton in the webapp, so no need for it here! :)
     
     private LobbyFactory() {
         
     }
     
     public static Lobby getLobby(String persistenceUnitName) {
-        if(INSTANCE == null )
-            INSTANCE = new Lobby(persistenceUnitName);
-        return INSTANCE;
+        return new Lobby(persistenceUnitName);
     }
     
 }

@@ -23,8 +23,14 @@ public class Lobby implements ILobby {
     }
     
     @Override
-    public void register(String name, String password){
-        playerRegistry.add(new Player(name, password));
+    public Boolean register(String name, String password){
+        if (playerRegistry.find(name) == null) {
+            // If the name doesn't already exist, we create a new player and add it to the registry.
+            playerRegistry.add(new Player(name, password));
+            return true;
+        }
+        // Else, if the name already exists, we return false.
+        return false;           
     }
     
     @Override
@@ -44,6 +50,7 @@ public class Lobby implements ILobby {
     @Override
     public Boolean logout(String name) {
         Player p = playerRegistry.find(name);
+        
         if(p != null) {
             onlinePlayerList.remove(p);
             return true;

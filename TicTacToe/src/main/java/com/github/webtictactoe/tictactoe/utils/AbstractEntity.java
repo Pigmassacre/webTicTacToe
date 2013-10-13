@@ -9,8 +9,7 @@ import javax.persistence.MappedSuperclass;
 
 /**
  * Originally was AbstractEntity from Hajos shop model.
- * Base class for all entities (later to be stored in database), 
- * Product, Order, etc
+ * Base class for all entities: Players etc.
  * @author hajo
  */
 @MappedSuperclass

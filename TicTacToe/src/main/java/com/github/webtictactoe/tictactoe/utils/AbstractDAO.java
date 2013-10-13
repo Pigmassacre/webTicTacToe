@@ -13,6 +13,7 @@ import javax.persistence.Persistence;
  * T is type for items in container K is type of id (primary key)
  *
  * @author hajo
+ * @author pigmassacre
  */
 public abstract class AbstractDAO<T, K> implements IDAO<T, K> {
 

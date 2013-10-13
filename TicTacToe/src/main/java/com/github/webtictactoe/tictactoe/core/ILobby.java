@@ -8,7 +8,7 @@ import java.util.List;
  */
 public interface ILobby {
     
-    public void register(String name, String password);
+    public Boolean register(String name, String password);
     
     public Boolean login(String name, String password);
     
