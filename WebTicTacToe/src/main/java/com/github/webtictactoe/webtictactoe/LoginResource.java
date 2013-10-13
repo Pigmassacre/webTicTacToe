@@ -13,37 +13,43 @@ import javax.ws.rs.Produces;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 
-@Path("/")
+@Path("/login/")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class LoginResource {
     
     private ILobby lobby = Lobby.INSTANCE.getLobby();
     
-    /**
-     * Suspend the response without writing anything back to the client.
-     *
-     * @return a white space
-     */
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @GET
     public String suspend() {
-
         return "";
     }
-
-    /**
-     * Broadcast the received message object to all suspended response. Do not write back the message to the calling connection.
-     *
-     * @param message a {@link Message}
-     * @return a {@link Response}
-     */
+    
     @Broadcast(writeEntity = false)
     @POST
     @Produces("application/json")
-    public Response broadcast(Message message) {
-        return new Response(message.author, message.message);
+    public LoginResponse broadcast(LoginMessage loginMessage) {
+        String message;
+        Boolean success = lobby.login(loginMessage.name, loginMessage.password);
+        
+        System.out.println("login() called with data: " + loginMessage.name + " / " + loginMessage.password);
+        
+        if(success) {
+            message = "Login succeeded!";
+        } else {
+            // Login failed, so we try to register a new user with these credentials instead.
+            success = lobby.register(loginMessage.name, loginMessage.password);
+            
+            if (success) {
+                message = "Registration succeeded!";
+            } else {
+                message = "That password doesn't match that username, try again!";
+            }
+        }
+        
+        return new LoginResponse(message, success);
     }
-
+    
     public static final class OnDisconnect extends AtmosphereResourceEventListenerAdapter {
         /**
          * {@inheritDoc}
@@ -53,22 +59,5 @@ public class LoginResource {
             System.out.println(event);
         }
     }
-    /*
-    @POST
-    @Produces("application/json")
-    public LoginResponse login(LoginMessage loginMessage) {
-        String message;
-        Boolean success = lobby.login(loginMessage.name, loginMessage.password);
-        
-        System.out.println("login() called");
-        
-        if(success) {
-            message = "Login failed, username or password does not match.";
-        } else {
-            message = "Login succeeded!";
-        }
-        
-        return new LoginResponse(message, success);
-    }
-    */
+ 
 }

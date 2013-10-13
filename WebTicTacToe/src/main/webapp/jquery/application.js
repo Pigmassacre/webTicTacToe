@@ -6,7 +6,7 @@ $(function () {
     var name = $('#name'); 
     var password = $('#password'); // Yes yes, terribly unsafe and stupid... :P
     var socket = $.atmosphere;
-    var loginRequest = { url: document.location.toString() + 'chat',
+    var loginRequest = { url: document.location.toString() + 'lobby/login',
                     contentType : "application/json",
                     logLevel : 'debug',
                     transport : 'websocket' ,
@@ -30,10 +30,11 @@ $(function () {
             return;
         }
 
-        alert(json.keys());
         $('#login-name').hide();
         $('#login-password').hide();
-        // TODO
+        
+        
+        userlist.html($('<p>', { text: message }));
     };
 
     loginRequest.onError = function(response) {
@@ -47,6 +48,8 @@ $(function () {
         if (e.keyCode === 13) {
             var givenName = name.val();
             var givenPassword = password.val();
+            
+            alert(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
             
             // Pushes the name and password to the server.
             subSocket.push(jQuery.stringifyJSON({ name: givenName, password: givenPassword }));
