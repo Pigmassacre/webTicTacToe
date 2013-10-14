@@ -1,12 +1,11 @@
 package com.github.webtictactoe.webtictactoe;
 
-import com.github.webtictactoe.tictactoe.core.Game;
 import com.github.webtictactoe.tictactoe.core.GameSession;
+import java.util.UUID;
+import javax.ws.rs.Consumes;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
 import java.util.HashMap;
-import java.util.UUID;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
@@ -20,7 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-@Path("/")
+@Path("/game/{id}")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class GameResource {
     
