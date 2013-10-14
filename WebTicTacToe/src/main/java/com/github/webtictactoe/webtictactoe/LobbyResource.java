@@ -4,6 +4,7 @@ import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
@@ -17,6 +18,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 
@@ -56,25 +59,21 @@ public class LobbyResource {
     @POST
     @Produces("application/json")
     @Path("/logout/")
-    public LogoutResponse logout(LogoutMessage logoutMessage) {
-        String message;
-        Boolean success = lobby.logout(logoutMessage.name);
-        
-        // TODO: figure out how to properly handle logging in/out. As it works right now
-        // the server logs in to the model correctly, and then the client side simply
-        // subscribes to the lobbyresource and recieves broadcasts from that.
-        // However, if the client reloads the page all context is lost and the client has to
-        // login again. Do we save information in a cookie, clientside, or do we do
-        // something more advanced? This logout function here needs the name, but that
-        // is where I got stuck. Currently there's no way each client knows what user it is signed in as.
+    public Response logout(@CookieParam(value = "name") String name) {
+        Boolean success = lobby.logout(name);
         
         if (success) {
-            message = "You have been successfully logged out!";
+            return Response
+                    .ok()
+                    .entity(new LogoutResponse("You have been successfully logged out!"))
+                    .cookie(new NewCookie(name, "", "", "", "", 0, false))
+                    .build();
         } else {
-            message = "Failed to log out, try again!";
+            return Response
+                    .ok()
+                    .entity(new LogoutResponse("Logout failed, try again!"))
+                    .build();
         }
-        
-        return new LogoutResponse(message, success);
     }
     
     public static final class OnDisconnect extends AtmosphereResourceEventListenerAdapter {
@@ -83,7 +82,7 @@ public class LobbyResource {
          */
         @Override
         public void onDisconnect(AtmosphereResourceEvent event) {
-            System.out.println(event);
+            System.out.println(event.broadcaster().getAtmosphereResources());
         }
     }
     
