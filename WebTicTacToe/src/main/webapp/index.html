@@ -6,22 +6,60 @@
     <script type="text/javascript" src="jquery/jquery-1.9.0.js"></script>
     <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>
     <script type="text/javascript" src="jquery/application.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <script type="text/javascript" src="jquery/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 </head>
 <body>
-    <div id="header"><h3>Welcome to the WebTicTacToe lobby.</h3></div>
-    <div id="userlist"></div>
-    <div id="content">Enter a username and password to login.</div>
-    <div id="login-name">
-        <span id="status" class="left">Name:</span>
-        <input type="text" id="name"/>
+        <div id="pageLogin" class="fullPage">
+        <div class="center" id="login">
+            <h1>TIC TAC PRO</h1>
+            <hr>
+            <div>
+                <form method="post">
+                    <p>Username:</p>
+                    <input type="text">
+                    <p>Password:</p>
+                    <input type="password">
+                    <p>
+                        <input type="button"
+                            value="Login">
+                        <input type="button"
+                            value="reset">
+                    </p>
+                    <p>
+                        <a href="#">Register?</a>
+                    </p>
+                </form>
+            </div>
+        </div>
     </div>
-    <div id="login-password">
-        <p class="left">Password:</p>
-        <input type="text" id="password"/>
+    <div id="pageLobby" class="fullPage">
+        <div class="center" id="lobby">
+            <h1>Page 2: Lobby</h1>
+            <hr>
+            <div>
+                <form method="post">
+                    <p>
+                        <input type="button"
+                            value="Find Game">
+                        <input type="button"
+                            value="Log out">
+                    </p>
+                    <p>Status: <samp id="statusField">Unkown</samp></p>
+                </form>
+            </div>
+        </div>
     </div>
-    <div id="user-controls" hidden>
-        <button id="logout" type="button">Log Out</button>
+    <div id="pageGame" class="fullPage">
+        <div class="center" id="game">
+            <h1>Page 3: Game</h1>
+            <hr>
+            <canvas id="gameCanvas"></canvas>
+            <div>
+                <p>Player Turn: <samp>discoKungen</samp></p>
+                <p>Connection: <samp>Fallback Comet</samp></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>
