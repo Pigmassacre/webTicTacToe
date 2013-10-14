@@ -4,6 +4,7 @@ import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.Cookie;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import org.atmosphere.annotation.Broadcast;
@@ -12,6 +13,7 @@ import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -28,18 +30,12 @@ public class LobbyResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
     private @CookieParam(value = "name") String name;
-    private @Context AtmosphereResource resource;
-    // This is used to map X-Atmosphere-tracking-id's to usernames.
-    private static HashMap<String, String> idMap = new HashMap<String, String>();
-    
     
     @GET
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @Path("/playerlist")
     public String suspend() {
-        System.out.println(resource.getRequest().getHeader("X-Atmosphere-tracking-id"));
-        idMap.put(resource.getRequest().getHeader("X-Atmosphere-tracking-id"), name);
-        System.out.println("Suspending connection!");
+        System.out.println("Suspending connection for " + name);
         return "";
     }
     
@@ -68,9 +64,8 @@ public class LobbyResource {
     @POST
     @Produces("application/json")
     @Path("/logout/")
-    public Response logout(@CookieParam(value = "name") String name) {
+    public Response logout() {
         Boolean success = lobby.logout(name);
-        
         System.out.println("Logout() called by " + name);
         
         if (success) {
@@ -94,12 +89,18 @@ public class LobbyResource {
          */
         @Override
         public void onDisconnect(AtmosphereResourceEvent event) {
-            // Gets the name from the idMap, logs out that user and then broadcasts the new playerlist.
-            String nameFromId = idMap.get(event.getResource().getRequest().getHeader("X-Atmosphere-tracking-id"));
-            lobby.logout(nameFromId);
+            String nameFromCookie = "";
+            for (Cookie cookie: event.getResource().getRequest().getCookies()) {
+                if (cookie.getName().equals("name")) {
+                    nameFromCookie = cookie.getValue();
+                }
+            }
+
+            lobby.logout(nameFromCookie);            
             event.broadcaster().broadcast(getPlayerlist());
-            System.out.println(nameFromId + " was automatically logged out!");
+            System.out.println(nameFromCookie + " was automatically logged out!");
         }
+        
     }
     
 }
