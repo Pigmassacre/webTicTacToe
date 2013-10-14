@@ -13,6 +13,7 @@ import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -65,8 +66,7 @@ public class LobbyResource {
     @Path("/logout/")
     public Response logout() {
         Boolean success = lobby.logout(name);
-        System.out.println("Logout() called by " + name);
-        
+
         System.out.println("Logout() called by " + name);
         
         if (success) {
