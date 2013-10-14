@@ -28,8 +28,10 @@ public class LobbyResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
     private @CookieParam(value = "name") String name;
-    private static HashMap<String, String> idMap = new HashMap<String, String>();
     private @Context AtmosphereResource resource;
+    // This is used to map X-Atmosphere-tracking-id's to usernames.
+    private static HashMap<String, String> idMap = new HashMap<String, String>();
+    
     
     @GET
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
@@ -46,7 +48,7 @@ public class LobbyResource {
     @Produces("application/json")
     @Path("/playerlist")
     public Playerlist broadcastPlayerlist() {
-        System.out.println("updatePlayerlist() called by " + name);
+        System.out.println("broadcastPlayerlist() called by " + name);
         return getPlayerlist();
     }
     
@@ -68,6 +70,8 @@ public class LobbyResource {
     @Path("/logout/")
     public Response logout(@CookieParam(value = "name") String name) {
         Boolean success = lobby.logout(name);
+        
+        System.out.println("Logout() called by " + name);
         
         if (success) {
             return Response
