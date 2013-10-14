@@ -6,11 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LoginResponse {
 
     public String message;
-    public Boolean success;
 
-    public LoginResponse(String message, Boolean success) {
+    public LoginResponse(String message) {
         this.message = message;
-        this.success = success;
     }
 
     public LoginResponse() {
