@@ -2,6 +2,7 @@ package com.github.webtictactoe.webtictactoe;
 
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
@@ -11,15 +12,13 @@ import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 
@@ -27,12 +26,17 @@ import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class LobbyResource {
     
-    private ILobby lobby = Lobby.INSTANCE.getLobby();
+    private static ILobby lobby = Lobby.INSTANCE.getLobby();
+    private @CookieParam(value = "name") String name;
+    private static HashMap<String, String> idMap = new HashMap<String, String>();
+    private @Context AtmosphereResource resource;
     
     @GET
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @Path("/playerlist")
     public String suspend() {
+        System.out.println(resource.getRequest().getHeader("X-Atmosphere-tracking-id"));
+        idMap.put(resource.getRequest().getHeader("X-Atmosphere-tracking-id"), name);
         System.out.println("Suspending connection!");
         return "";
     }
@@ -41,10 +45,13 @@ public class LobbyResource {
     @Broadcast(writeEntity = false)
     @Produces("application/json")
     @Path("/playerlist")
-    public Playerlist updatePlayerlist() {
+    public Playerlist broadcastPlayerlist() {
+        System.out.println("updatePlayerlist() called by " + name);
+        return getPlayerlist();
+    }
+    
+    public static Playerlist getPlayerlist() {
         Playerlist playerlist = new Playerlist();
-        
-        System.out.println("updatePlayerlist() called");
         
         List<Player> onlinePlayers = lobby.getOnlinePlayers();
         
@@ -66,7 +73,7 @@ public class LobbyResource {
             return Response
                     .ok()
                     .entity(new LogoutResponse("You have been successfully logged out!"))
-                    .cookie(new NewCookie(name, "", "", "", "", 0, false))
+                    .cookie(new NewCookie("name", "", "/", "", "", 0, false))
                     .build();
         } else {
             return Response
@@ -77,12 +84,17 @@ public class LobbyResource {
     }
     
     public static final class OnDisconnect extends AtmosphereResourceEventListenerAdapter {
+        
         /**
          * {@inheritDoc}
          */
         @Override
         public void onDisconnect(AtmosphereResourceEvent event) {
-            System.out.println(event.broadcaster().getAtmosphereResources());
+            // Gets the name from the idMap, logs out that user and then broadcasts the new playerlist.
+            String nameFromId = idMap.get(event.getResource().getRequest().getHeader("X-Atmosphere-tracking-id"));
+            lobby.logout(nameFromId);
+            event.broadcaster().broadcast(getPlayerlist());
+            System.out.println(nameFromId + " was automatically logged out!");
         }
     }
     
