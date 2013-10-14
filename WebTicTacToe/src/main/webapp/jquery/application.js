@@ -49,10 +49,6 @@ $(function () {
         content.html($('<p>', { text: 'Sorry, but there\'s some problem with your '
             + 'socket or the server is down' }));
     };
-    /*
-    request.onClose = function(response) {
-        subSocket.push();
-    };*/
 
     password.keydown(function(e) {
         if (e.keyCode === 13) {
