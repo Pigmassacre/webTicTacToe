@@ -16,10 +16,6 @@ $(function () {
                     fallbackTransport: 'long-polling'};
     var subSocket;
 
-    // If a cookie exists, populate the name field with the given name.
-    name.val($.cookie("name"));
-    password.focus();
-
     request.onOpen = function(response) {
         content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
         name.removeAttr('disabled');
@@ -53,6 +49,10 @@ $(function () {
         content.html($('<p>', { text: 'Sorry, but there\'s some problem with your '
             + 'socket or the server is down' }));
     };
+    /*
+    request.onClose = function(response) {
+        subSocket.push();
+    };*/
 
     password.keydown(function(e) {
         if (e.keyCode === 13) {
@@ -91,9 +91,9 @@ $(function () {
         });
     }
     
-    function onLoginResponse(data, textStatus, jqXHR) {
+    function onLoginResponse(data) {
         // Successfully logged in!
-        $('#header').html("<h3>Welcome to the WebTicTacToe lobby, " + $.cookie("name") + "!");
+        $('#header').html("<h3>Welcome to the WebTicTacToe lobby, " + data.name + "!");
         $('#login-name').hide();
         $('#login-password').hide();
 
@@ -104,7 +104,7 @@ $(function () {
         subSocket = socket.subscribe(request);
 
         // This push here is to update the playerlist for all connected players.
-        // Seems to be a bug with atmosphere... :/
+        // Seems to be a bug with atmosphere, so have to set timeout for it... :/
         setTimeout(subSocket.push, 1100);
         
         content.html($('<p>', { text: data.message }));
@@ -128,16 +128,13 @@ $(function () {
     });
 
     function onLogoutResponse(data) {
-        // Logout worked, cookie has been removed.
+        // Logout worked.
         $('#header').html("<h3>Welcome to the WebTicTacToe lobby!");
         userlist.html($(''));
         content.html($('<p>', { text: "Enter a username and password to login." }));
         $('#login-name').show();
         $('#login-password').show();
         $('#user-controls').hide();
-        
-        // Tell all connected players to update their playerlists.
-        subSocket.push();
         
         // Unsubscribe from the socket.
         socket.unsubscribe();
