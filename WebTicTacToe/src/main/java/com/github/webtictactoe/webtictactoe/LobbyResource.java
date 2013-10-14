@@ -67,6 +67,8 @@ public class LobbyResource {
         Boolean success = lobby.logout(name);
         System.out.println("Logout() called by " + name);
         
+        System.out.println("Logout() called by " + name);
+        
         if (success) {
             return Response
                     .ok()
