@@ -20,6 +20,6 @@ public interface ILobby {
     
     public PlayerRegistry getPlayerRegistry();
     
-    public void findGame(Player p1, int size);
+    public GameSession findGame(Player p1, int size);
   
 }

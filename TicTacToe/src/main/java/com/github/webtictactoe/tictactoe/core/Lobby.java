@@ -81,14 +81,21 @@ public class Lobby implements ILobby {
      * @param size Size of the board
      */
     @Override
-    public void findGame(Player p1, int size) {
+    public GameSession findGame(Player p1, int size) {
         
         onlinePlayerList.remove(p1);
         
         if(!onlinePlayerList.isEmpty()){
             Player p2 = onlinePlayerList.remove(0);
-            activeGames.add(new GameSession(new Game(size),p1, p2));
+            Game newGame = new Game(size);
+            GameSession newGameSession = new GameSession(newGame, p1, p2);
+            activeGames.add(newGameSession);
+            
+            return newGameSession;
         }
+        
+        // No game session could be created, therefore we have no real choice but to return null. :/
+        return null;
     }
     
 }
