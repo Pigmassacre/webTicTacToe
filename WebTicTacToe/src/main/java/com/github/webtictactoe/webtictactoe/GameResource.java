@@ -1,6 +1,5 @@
 package com.github.webtictactoe.webtictactoe;
 
-import com.github.webtictactoe.tictactoe.core.Game;
 import com.github.webtictactoe.tictactoe.core.GameSession;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
@@ -20,7 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-@Path("/")
+@Path("/game")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class GameResource {
     
@@ -31,7 +30,7 @@ public class GameResource {
     
     @GET
     @Suspend(contentType = "application/json")
-    @Path("/game/{id}")
+    @Path("/{id}")
     public String suspend(@PathParam(value = "id") UUID id) {
         if (gameSessionMap.containsKey(id)) {
             
@@ -79,7 +78,7 @@ public class GameResource {
     @Broadcast(writeEntity = false)
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("/game/{id}/move")
+    @Path("/{id}/move")
     public GameResponse broadcastGamestate(@PathParam(value = "id") String id, GameMessage gameMessage) {
         return new GameResponse();
     }
