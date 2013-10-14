@@ -26,7 +26,7 @@ public enum Lobby {
     
     private Lobby() {
         lobby = LobbyFactory.getLobby(persistenceUnitName);
-    }
+    } 
     
     public ILobby getLobby() {
         return lobby;
