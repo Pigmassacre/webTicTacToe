@@ -16,6 +16,9 @@ $(function () {
                     fallbackTransport: 'long-polling'};
     var subSocket;
 
+    // If a cookie exists, populate the name field with the given name.
+    name.val($.cookie("name"));
+    password.focus();
 
     request.onOpen = function(response) {
         content.html($('<p>', { text: 'Atmosphere connected using ' + response.transport }));
@@ -58,6 +61,9 @@ $(function () {
             
             tryToLogin(givenName, givenPassword);
             
+            name.val('');
+            password.val('');
+            
             name.attr('disabled', 'disabled');
             password.attr('disabled', 'disabled');
         }
@@ -77,6 +83,7 @@ $(function () {
                       switch(jqXHR.status) {
                           case 400:
                               content.html($('<p>', { text: json.message }));
+                              name.val($.cookie("name"));
                               break;
                           }
                       },
@@ -84,7 +91,9 @@ $(function () {
         });
     }
     
-    function onLoginResponse(data) {
+    function onLoginResponse(data, textStatus, jqXHR) {
+        // Successfully logged in!
+        $('#header').html("<h3>Welcome to the WebTicTacToe lobby, " + $.cookie("name") + "!");
         $('#login-name').hide();
         $('#login-password').hide();
 
@@ -95,7 +104,8 @@ $(function () {
         subSocket = socket.subscribe(request);
 
         // This push here is to update the playerlist for all connected players.
-        setTimeout(subSocket.push, 1000);
+        // Seems to be a bug with atmosphere... :/
+        setTimeout(subSocket.push, 2000);
         
         content.html($('<p>', { text: data.message }));
     };
@@ -119,6 +129,7 @@ $(function () {
 
     function onLogoutResponse(data) {
         // Logout worked, cookie has been removed.
+        $('#header').html("<h3>Welcome to the WebTicTacToe lobby!");
         userlist.html($(''));
         content.html($('<p>', { text: "Enter a username and password to login." }));
         $('#login-name').show();
