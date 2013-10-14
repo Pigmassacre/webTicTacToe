@@ -105,7 +105,7 @@ $(function () {
 
         // This push here is to update the playerlist for all connected players.
         // Seems to be a bug with atmosphere... :/
-        setTimeout(subSocket.push, 2000);
+        setTimeout(subSocket.push, 1100);
         
         content.html($('<p>', { text: data.message }));
     };
