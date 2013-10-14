@@ -70,7 +70,7 @@ public class LobbyResource {
                     .build();
         } else {
             return Response
-                    .ok()
+                    .status(400)
                     .entity(new LogoutResponse("Logout failed, try again!"))
                     .build();
         }
