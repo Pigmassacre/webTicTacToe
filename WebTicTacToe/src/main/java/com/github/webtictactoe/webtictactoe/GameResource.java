@@ -1,9 +1,9 @@
 package com.github.webtictactoe.webtictactoe;
 
+import com.github.webtictactoe.tictactoe.core.GameSession;
 import com.github.webtictactoe.tictactoe.core.ILobby;
-import com.github.webtictactoe.tictactoe.core.Player;
 import java.util.HashMap;
-import java.util.List;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
 import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
@@ -15,38 +15,34 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
-import org.atmosphere.cpr.AtmosphereResource;
-import org.atmosphere.cpr.AtmosphereResourceEvent;
-import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
+import org.atmosphere.cpr.Broadcaster;
 
 @Path("/game/{id}")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class GameResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
-    private @PathParam(value = "id") Integer id;
-    private @Context AtmosphereResource resource;
-    // This is used to map X-Atmosphere-tracking-id's to usernames.
-    //private static HashMap<String, String> idMap = new HashMap<String, String>();
-    
+    private static HashMap<String, GameSession> gameSessionMap = new HashMap<String, GameSession>();
+    private @PathParam(value = "id") String id;
+    private @CookieParam(value = "name") String name;
     
     @GET
     @Suspend(contentType = "application/json")
-    //@Path("/playerlist")
     public String suspend() {
-        System.out.println("!");
+        if (gameSessionMap.containsKey(id)) {
+            
+        }
+        System.out.println("Suspending response for " + name);
         return "";
     }
     
     @POST
     @Broadcast(writeEntity = false)
+    @Consumes("application/json")
     @Produces("application/json")
-    //@Path("/playerlist")
-    public String broadcastPlayerlist() {
-        return "";
+    @Path("/move")
+    public GameResponse broadcastGamestate(GameMessage gameMessage) {
+        return new GameResponse();
     }
     
 }
