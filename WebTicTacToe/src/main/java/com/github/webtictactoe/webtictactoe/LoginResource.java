@@ -13,6 +13,14 @@ public class LoginResource {
     
     private ILobby lobby = Lobby.INSTANCE.getLobby();
     
+    /**
+     * A REST method that, given a loginMessage (basically a JSON object that looks like this { name: name, password: password })
+     * tries to login the Player with the given credentials. If no player matches those credentials, those credentials are used
+     * to create a new Player that is then logged in.
+     * 
+     * @param loginMessage the JSON object that contains the credentials
+     * @return a Jersey response object
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -36,14 +44,12 @@ public class LoginResource {
                 
                 if (success) {
                     lobby.login(loginMessage.name, loginMessage.password);
-                    System.out.println("Registered!");
                     return Response
                             .ok()
                             .entity(new LoginResponse("You have been registered!"))
                             .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
                             .build();
                 } else {
-                    System.out.println("Failed to log in!");
                     return Response
                             .status(400)
                             .entity(new LoginResponse("That password doesn't match that username, try again!"))
@@ -52,7 +58,6 @@ public class LoginResource {
             }
         } else {
             // If the name and / or password is empty, the user is denied registration.
-            System.out.println("Reached end of function!");
             return Response
                     .status(400)
                     .entity(new LoginResponse("Name and / or password cannot be empty!"))
