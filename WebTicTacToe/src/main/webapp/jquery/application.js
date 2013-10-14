@@ -62,6 +62,16 @@ $(function () {
                                       data: $.stringifyJSON({ name: givenName, password: givenPassword }),
                                       contentType: 'application/json',
                                       dataType: 'json',
+                                      error: function(jqXHR, textStatus, errorThrown) {
+                                            name.removeAttr('disabled');
+                                            password.removeAttr('disabled');
+                                            var json = $.parseJSON(jqXHR.responseText);
+                                            switch(jqXHR.status) {
+                                                case 400:
+                                                    content.html($('<p>', { text: json.message }));
+                                                    break;
+                                                }
+                                            },
                                       success: onLoginResponse
             });
             
@@ -71,7 +81,6 @@ $(function () {
     });
     
     function onLoginResponse(data) {
-        if (data.success === 'true') {
             $('#login-name').hide();
             $('#login-password').hide();
             
@@ -83,22 +92,29 @@ $(function () {
             
             // This push here is to update the playerlist for all connected players.
             setTimeout(subSocket.push, 500);
-        } else {
-            name.removeAttr('disabled');
-            password.removeAttr('disabled');
-        }
+        
         content.html($('<p>', { text: data.message }));
     };
 
     logout.click(function(event) {
-        var logoutRequest = { url: baseuri + '/logout',
-                    contentType : "application/json",
-                    logLevel : 'debug',
-                    transport : 'websocket',
-                    trackMessageLength : true,
-                    fallbackTransport: 'long-polling'};
+        // POSTs the name and password to the server.
+        $.ajax({url: baseuri + '/logout',
+                type: 'POST',
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                      name.removeAttr('disabled');
+                      password.removeAttr('disabled');
+                      var json = $.parseJSON(jqXHR.responseText);
+                      switch(jqXHR.status) {
+                          case 400:
+                              content.html($('<p>', { text: json.message }));
+                              break;
+                          }
+                      },
+                success: onLoginResponse
+        });
                 
-        subSocket.push(logoutRequest);
+        subSocket.push();
     });
 
 });
