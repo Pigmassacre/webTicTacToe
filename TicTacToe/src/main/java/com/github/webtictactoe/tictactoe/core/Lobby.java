@@ -30,18 +30,18 @@ public class Lobby implements ILobby {
             return true;
         }
         // Else, if the name already exists, we return false.
-        return false;           
+        return false;
     }
     
     @Override
     public Boolean login(String name, String password){
         Player p = playerRegistry.find(name);
         
-        if(p != null &&
-           password.equals(p.getPassword()) &&
-           !onlinePlayerList.contains(p)) {
-           onlinePlayerList.add(p);
-           return true;
+        if(p != null && password.equals(p.getPassword())) {
+            if (!onlinePlayerList.contains(p)) {
+                onlinePlayerList.add(p);
+            }
+            return true;
         }
         // We return false if the login fails for any reason.
         return false;
@@ -70,7 +70,7 @@ public class Lobby implements ILobby {
     
     
     /**
-     * findGame creates a game and 
+     * findGame creates a game and
      * forces another player to join p1 and something
      * @param p1 player that want to join a game
      * @param size Size of the board
