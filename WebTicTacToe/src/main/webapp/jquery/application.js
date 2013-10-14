@@ -56,50 +56,19 @@ $(function () {
             var givenName = name.val();
             var givenPassword = password.val();
             
-            // POSTs the name and password to the server.
-            $.ajax({url: baseuri + '/login',
-                                      type: 'POST',
-                                      data: $.stringifyJSON({ name: givenName, password: givenPassword }),
-                                      contentType: 'application/json',
-                                      dataType: 'json',
-                                      error: function(jqXHR, textStatus, errorThrown) {
-                                            name.removeAttr('disabled');
-                                            password.removeAttr('disabled');
-                                            var json = $.parseJSON(jqXHR.responseText);
-                                            switch(jqXHR.status) {
-                                                case 400:
-                                                    content.html($('<p>', { text: json.message }));
-                                                    break;
-                                                }
-                                            },
-                                      success: onLoginResponse
-            });
+            tryToLogin(givenName, givenPassword);
             
             name.attr('disabled', 'disabled');
             password.attr('disabled', 'disabled');
         }
     });
     
-    function onLoginResponse(data) {
-            $('#login-name').hide();
-            $('#login-password').hide();
-            
-            // We show the user controls.
-            $('#user-controls').show();
-            
-            // Now, since we're logged in, we subscribe to the request.
-            subSocket = socket.subscribe(request);
-            
-            // This push here is to update the playerlist for all connected players.
-            setTimeout(subSocket.push, 500);
-        
-        content.html($('<p>', { text: data.message }));
-    };
-
-    logout.click(function(event) {
+    function tryToLogin(givenName, givenPassword) {
         // POSTs the name and password to the server.
-        $.ajax({url: baseuri + '/logout',
+        $.ajax({url: baseuri + '/login',
                 type: 'POST',
+                data: $.stringifyJSON({ name: givenName, password: givenPassword }),
+                contentType: 'application/json',
                 dataType: 'json',
                 error: function(jqXHR, textStatus, errorThrown) {
                       name.removeAttr('disabled');
@@ -113,8 +82,54 @@ $(function () {
                       },
                 success: onLoginResponse
         });
-                
-        subSocket.push();
+    }
+    
+    function onLoginResponse(data) {
+        $('#login-name').hide();
+        $('#login-password').hide();
+
+        // We show the user controls.
+        $('#user-controls').show();
+
+        // Now, since we're logged in, we subscribe to the request.
+        subSocket = socket.subscribe(request);
+
+        // This push here is to update the playerlist for all connected players.
+        setTimeout(subSocket.push, 1000);
+        
+        content.html($('<p>', { text: data.message }));
+    };
+
+    logout.click(function(event) {
+        // POSTs the name and password to the server.
+        $.ajax({url: baseuri + '/logout',
+                type: 'POST',
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) {
+                      var json = $.parseJSON(jqXHR.responseText);
+                      switch(jqXHR.status) {
+                          case 400:
+                              content.html($('<p>', { text: json.message }));
+                              break;
+                          }
+                      },
+                success: onLogoutResponse
+        });
     });
+
+    function onLogoutResponse(data) {
+        // Logout worked, cookie has been removed.
+        userlist.html($(''));
+        content.html($('<p>', { text: "Enter a username and password to login." }));
+        $('#login-name').show();
+        $('#login-password').show();
+        $('#user-controls').hide();
+        
+        // Tell all connected players to update their playerlists.
+        subSocket.push();
+        
+        // Unsubscribe from the socket.
+        socket.unsubscribe();
+    }
 
 });

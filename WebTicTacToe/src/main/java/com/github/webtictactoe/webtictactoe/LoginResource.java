@@ -2,17 +2,14 @@ package com.github.webtictactoe.webtictactoe;
 
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import javax.ws.rs.Consumes;
-import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
@@ -42,8 +39,7 @@ public class LoginResource {
             // As long as the name and password aren't empty, we try to login.
             success = lobby.login(loginMessage.name, loginMessage.password);
             if(success) {
-                //message = "Login succeeded!";
-                return Response.ok().cookie(new NewCookie("name", loginMessage.name)).build();
+                return Response.ok().entity(new LoginResponse("Login succeeded!")).cookie(new NewCookie("name", loginMessage.name)).build();
             } else {
                 // Login failed, so we try to register a new user with these credentials instead.
                 success = lobby.register(loginMessage.name, loginMessage.password);
@@ -53,6 +49,7 @@ public class LoginResource {
                     System.out.println("Registered!");
                     return Response.ok().entity(new LoginResponse("You have been registered!")).cookie(new NewCookie("name", loginMessage.name)).build();
                 } else {
+                    System.out.println("Failed to log in!");
                     return Response.status(400).entity(new LoginResponse("That password doesn't match that username, try again!")).build();
                 }
             }
