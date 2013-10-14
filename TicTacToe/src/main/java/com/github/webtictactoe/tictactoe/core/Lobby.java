@@ -16,7 +16,7 @@ public class Lobby implements ILobby {
     private List<Player> onlinePlayerList = new ArrayList();
     private List<GameSession> activeGames = new ArrayList();
     
-    PlayerRegistry playerRegistry;
+    private PlayerRegistry playerRegistry;
     
     public Lobby(String persistenceUnitName){
         playerRegistry = new PlayerRegistry(persistenceUnitName);
@@ -64,10 +64,15 @@ public class Lobby implements ILobby {
         return onlinePlayerList;
     }
     
+    @Override
     public List<GameSession> getActiveGames(){
         return activeGames;
     }
     
+    @Override
+    public PlayerRegistry getPlayerRegistry(){
+        return playerRegistry;
+    }
     
     /**
      * findGame creates a game and 

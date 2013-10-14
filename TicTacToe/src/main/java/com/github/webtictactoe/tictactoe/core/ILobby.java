@@ -16,6 +16,10 @@ public interface ILobby {
     
     public List<Player> getOnlinePlayers();
     
+    public List<GameSession> getActiveGames();
+    
+    public PlayerRegistry getPlayerRegistry();
+    
     public void findGame(Player p1, int size);
   
 }
