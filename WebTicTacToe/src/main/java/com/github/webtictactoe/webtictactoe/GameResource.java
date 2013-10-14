@@ -26,6 +26,7 @@ public class GameResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
     private static HashMap<UUID, GameSession> gameSessionMap = new HashMap<UUID, GameSession>();
+    // We know the name of the player of the request by the use of cookies!
     private @CookieParam(value = "name") String name;
     
     @GET
