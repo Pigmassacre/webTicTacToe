@@ -2,24 +2,38 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+var debug = true;
 
 
-$(document).ready(function () {
+
+$(function () {
     "use strict";
+    /*
+     * EVENT LISTENERS
+     */
+    $('#buttonLogin').click(loginController.login);
+    
+    $('#buttonReset').click(loginController.reset);
+    
+    $('#buttonRegister').click(loginController.register);
+    
+    $('#buttonFindgame').click(lobbyController.findGame);
+    
+    $('#buttonLogout').click(lobbyController.logout);
+    
+    $('#buttonToLobby').click(lobbyController.backToLobby);
+    
+    /* Initializing Game Canvas  */
+    gameCanvas.init($('#gameCanvas'),
+        $('#gameCanvas')[0].getContext('2d'));
+    /*
+     * Fade in page
+     */
     $("#pageLogin").fadeIn(1500);
-    $("#pageLogin").click(function () {
-        $("#pageLogin").fadeOut(500, function () {
-            $("#pageLobby").fadeIn(500);
-        });
-    });
-    $("#pageLobby").click(function () {
-        $("#pageLobby").fadeOut(500, function () {
-            $("#pageGame").fadeIn(500);
-        });
-    });
+    
     $("#pageGame").click(function () {
-        $("#pageGame").fadeOut(500, function () {
-            $("#pageLogin").fadeIn(500);
-        });
+        
     });
+    
 });
+
