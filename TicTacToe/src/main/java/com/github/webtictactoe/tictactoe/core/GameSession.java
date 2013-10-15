@@ -32,7 +32,7 @@ public class GameSession {
                     activePlayer = p2;
                 else
                     activePlayer = p1;
-                return game.gameWon();
+                return true; // This method returns true if the move was successful.
             }
         }
         return false;
