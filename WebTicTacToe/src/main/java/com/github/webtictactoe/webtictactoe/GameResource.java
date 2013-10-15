@@ -45,8 +45,16 @@ public class GameResource {
     }
     
     /**
-     * Finds an opponent, creates a game and a gamesession, maps that gamesession
-     * to a new UUID and then finally returns that UUID.
+     * Takes the first player that matches the name that is in the given cookie,
+     * and calls the findGame method in the Lobby class in the model to create
+     * a GameSession with that player and another player.
+     * 
+     * A random UUID is then generated, which is mapped to the new GameSession.
+     * This UUID is then broadcast to /player/{name}, where {name} is the name
+     * of either player.
+     * 
+     * Make sure to subscribe to /player/{name} in order to get the UUID which
+     * can then be used to communicate with the new GameSession.
      * 
      * @param size
      * @return a UUID that can be used to communicate with the matching gamesession.
@@ -69,10 +77,12 @@ public class GameResource {
             // Map the new gamesession to the new uuid.
             gameSessionMap.put(uuid, gameSession);
             
-            //BroadcasterFactory.getDefault().lookup("/" + gameSession.)
+            // Broadcast the UUID to the suspended requests that match both players names.
+            BroadcasterFactory.getDefault().lookup("/" + gameSession.getPlayerOne().getName()).broadcast(uuid);
+            BroadcasterFactory.getDefault().lookup("/" + gameSession.getPlayerTwo().getName()).broadcast(uuid);
             
-            // Return a response that contains the uuid.
-            return Response.ok().entity(uuid).build();
+            // Simply return an OK response, the UUID is broadcast to both relevant players above.
+            return Response.ok().build();
         }
         
         // Player matching that name not found, something terribly wrong has occured!
