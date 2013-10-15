@@ -48,7 +48,7 @@ public class LobbyResource {
         return getPlayerlist();
     }
     
-    public static Playerlist getPlayerlist() {
+    private static Playerlist getPlayerlist() {
         Playerlist playerlist = new Playerlist();
         
         List<Player> onlinePlayers = lobby.getOnlinePlayers();

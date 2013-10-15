@@ -1,6 +1,5 @@
 package com.github.webtictactoe.webtictactoe;
 
-import com.github.webtictactoe.tictactoe.core.ILobby;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
