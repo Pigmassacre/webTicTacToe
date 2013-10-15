@@ -1,5 +1,6 @@
 package com.github.webtictactoe.webtictactoe;
 
+import com.github.webtictactoe.tictactoe.core.Game.Mark;
 import com.github.webtictactoe.tictactoe.core.GameSession;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
@@ -33,9 +34,12 @@ public class GameResource {
     @Path("/{id}")
     public String suspend(@PathParam(value = "id") UUID id) {
         if (gameSessionMap.containsKey(id)) {
-            
+            System.out.println("Given UUID matches a game, request is OK");
+        } else {
+            System.out.println("Given UUID does NOT match a game!");
         }
-        System.out.println("Suspending response for " + name);
+        
+        System.out.println("Anyway, suspending response for " + name);
         return "";
     }
     
@@ -79,8 +83,52 @@ public class GameResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/{id}/move")
-    public GameResponse broadcastGamestate(@PathParam(value = "id") String id, GameMessage gameMessage) {
-        return new GameResponse();
+    public Response broadcastGamestate(@PathParam(value = "id") UUID id, GameMessage gameMessage) {
+        GameSession gameSession = gameSessionMap.get(id);
+        
+        // We get the first player matching the name (there should only ever be one anyway).
+        for (Player player : lobby.getPlayerRegistry().getByName(name)) {
+            // Take the first matching player.
+            Player givenPlayer = player;
+        
+            // Try to make a move to the given position with the given player.
+            Boolean successfulMove = gameSession.move(gameMessage.xPos, gameMessage.yPos, givenPlayer);
+            
+            // If the move is successful, we convert the new gameboard to a response-friendly format.
+            if (successfulMove) {
+                // The gameboard given by the session.
+                Mark[][] gameBoard = gameSession.getBoard();
+                
+                // The gameboard that we are to return in the response.
+                Character[][] responseGameBoard = new Character[gameBoard.length][gameBoard[0].length];
+                
+                // We loop through the gameboard and converts all Mark enums to string representations.
+                // Could possibly do this in a smarter way perhaps, 
+                for (int x = 0; x < gameBoard.length; x++) {
+                    for (int y = 0; y < gameBoard[x].length; y++) {
+                        switch (gameBoard[x][y]) {
+                            case EMPTY:
+                                responseGameBoard[x][y] = '\0'; // the null character
+                            case CIRCLE:
+                                responseGameBoard[x][y] = 'O'; // a big o (not a 0 or anything silly like that!)
+                            case CROSS:
+                                responseGameBoard[x][y] = 'X'; // a big x
+                        }
+                    }
+                }
+                // The move was successful, so we return an OK response together with the state of the board, and the name
+                // of the player who played last.
+                return Response
+                        .ok()
+                        .entity(new GameResponse(givenPlayer.getName(), responseGameBoard))
+                        .build();
+            }
+        }
+        
+        // Something went wrong, so we simply return the 400 status code.
+        return Response
+                .status(400)
+                .build();
     }
     
 }

@@ -5,10 +5,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GameMessage {
 
-    public String xPos;
-    public String yPos;
+    public Integer xPos;
+    public Integer yPos;
 
-    public GameMessage(String xPos, String yPos) {
+    public GameMessage(Integer xPos, Integer yPos) {
         this.xPos = xPos;
         this.yPos = yPos;
     }
