@@ -5,11 +5,15 @@ var gameCanvas = function () {
     
     
     var canvas;
+    
     var ctxBg;
     
     function publicInit (canvasElem, ctxElem) {
         canvas = canvasElem;
-        ctxBg = ctxElem; 
+        ctxBg = ctxElem;
+        ctxBg.canvas.height = 420;
+        ctxBg.canvas.width = 420;
+        
     }
     
     function publicFill (posX, posY, type) {
@@ -34,13 +38,22 @@ var gameCanvas = function () {
     var klick = 0;
     var boxX = 0;
     var boxY = 0;
-    var width = 140;
-    var total = 3
+    var width;
+    var total = 5;
     var player = 1;
     var count = 1;
     var a = [];
-    
-    
+    //canvas[0].width = 400;  
+    if(total == 3){
+        width = 140;
+        
+    }
+    else if(total == 4){
+        width = 105;
+    }
+    else if(total == 5){
+        width = 70;
+    }
     
     
     var box = new Image();
@@ -70,7 +83,7 @@ var gameCanvas = function () {
         
         for(var iw = 0; iw < total; iw++){
             for(var jw = 0; jw < total; jw++){
-                ctxBg.drawImage(box, boxX+(iw*width), boxY+(jw*width));
+                ctxBg.drawImage(box, boxX+(iw*width), boxY+(jw*width), width, width);
                 
             }
         } 
