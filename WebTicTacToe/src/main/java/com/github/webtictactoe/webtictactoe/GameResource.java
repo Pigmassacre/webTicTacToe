@@ -116,11 +116,13 @@ public class GameResource {
                         }
                     }
                 }
+                
                 // The move was successful, so we return an OK response together with the state of the board, and the name
-                // of the player who played last.
+                // of the player who played last. We also return true if the game was won, or false if it was not.
+                // If the game was won, the given name will match to the winning player.
                 return Response
                         .ok()
-                        .entity(new GameResponse(givenPlayer.getName(), responseGameBoard))
+                        .entity(new GameResponse(givenPlayer.getName(), responseGameBoard, gameSession.gameWon()))
                         .build();
             }
         }
