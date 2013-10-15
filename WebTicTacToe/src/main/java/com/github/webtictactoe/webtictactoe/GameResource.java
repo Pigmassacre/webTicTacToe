@@ -19,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import org.atmosphere.cpr.BroadcasterFactory;
 
 @Path("/game")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
@@ -34,9 +35,9 @@ public class GameResource {
     @Path("/{id}")
     public String suspend(@PathParam(value = "id") UUID id) {
         if (gameSessionMap.containsKey(id)) {
-            System.out.println("Given UUID matches a game, request is OK");
+            System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
-            System.out.println("Given UUID does NOT match a game!");
+            System.out.println("Given UUID does NOT match a gamesession!");
         }
         
         System.out.println("Anyway, suspending response for " + name);
@@ -54,12 +55,10 @@ public class GameResource {
     @Produces("application/json")
     @Path("/findgame/{size}")
     public Response findGame(@PathParam(value = "size") Integer size) {
-        Player givenPlayer;
-        
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
             // Take the first matching player.
-            givenPlayer = player;
+            Player givenPlayer = player;
             
             // Find a game.
             GameSession gameSession = lobby.findGame(givenPlayer, size);
@@ -69,6 +68,8 @@ public class GameResource {
             
             // Map the new gamesession to the new uuid.
             gameSessionMap.put(uuid, gameSession);
+            
+            //BroadcasterFactory.getDefault().lookup("/" + gameSession.)
             
             // Return a response that contains the uuid.
             return Response.ok().entity(uuid).build();
