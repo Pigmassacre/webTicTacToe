@@ -41,4 +41,8 @@ public class GameSession {
     public Game.Mark[][] getBoard(){
         return game.getBoard();
     }
+    
+    public Boolean gameWon() {
+        return game.gameWon();
+    }
 }
