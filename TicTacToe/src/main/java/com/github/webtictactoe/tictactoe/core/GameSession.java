@@ -7,6 +7,7 @@ package com.github.webtictactoe.tictactoe.core;
 /**
  *
  * @author emileriksson
+ * @author pigmassacre
  */
 public class GameSession {
     private Player p1;
@@ -45,4 +46,13 @@ public class GameSession {
     public Boolean gameWon() {
         return game.gameWon();
     }
+    
+    public Player getPlayerOne() {
+        return p1;
+    }
+    
+    public Player getPlayerTwo() {
+        return p2;
+    }
+    
 }
