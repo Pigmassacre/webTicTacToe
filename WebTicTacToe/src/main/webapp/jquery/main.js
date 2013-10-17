@@ -13,6 +13,8 @@ $(function () {
      */
     $('#buttonLogin').click(loginController.login);
     
+    $('#buttonRegister').click(loginController.register);
+    
     $('#buttonReset').click(loginController.reset);
     
     $('#buttonRegister').click(loginController.register);
@@ -23,13 +25,12 @@ $(function () {
     
     $('#buttonToLobby').click(lobbyController.backToLobby);
     
-    /* Initializing Game Canvas  */
-    gameCanvas.init($('#gameCanvas'),
-        $('#gameCanvas')[0].getContext('2d'));
+
+    lobbyController.updatePlayerList();
     /*
      * Fade in page
      */
-    $("#pageLogin").fadeIn(1500);
+    $("#pageLogin").fadeIn(100);
     
     $("#pageGame").click(function () {
         

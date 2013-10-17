@@ -1,73 +1,81 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>WebTicTacToe</title>
-    <script type="text/javascript" src="jquery/jquery-1.9.0.js"></script>
-    <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>
-    <script type="text/javascript" src="jquery/GameCanvas.js"></script>
-    <script type="text/javascript" src="jquery/Controller.js"></script>
-    <script type="text/javascript" src="jquery/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
-</head>
-<body>
-    <div id="pageLogin" class="fullPage">
-        <div class="center" id="login">
-            <h1>TIC TAC PRO</h1>
-            <hr>
-            <div>
-                <form method="post">
-                    <p>Username:</p>
-                    <input type="text" id="textUsername">
-                    <p>Password:</p>
-                    <input type="password" id="textPassword">
-                    <p>
-                        <input type="button"
-                            value="Login" id="buttonLogin">
-                        <input type="button"
-                            value="reset" id="buttonReset">
-                    </p>
-                    <p>
-                        <a href="" id="buttonRegister">Register?</a>
-                    </p>
-                </form>
+    <head>
+        <meta charset="utf-8">
+        <title>WebTicTacToe</title>
+        <script type="text/javascript" src="jquery/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>
+        <script type="text/javascript" src="jquery/Lobby.js"></script>
+        <script type="text/javascript" src="jquery/GameCanvas.js"></script>
+        <script type="text/javascript" src="jquery/Controller.js"></script>
+        <script type="text/javascript" src="jquery/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    </head>
+    <body>
+        <div id="pageLogin" class="fullPage">
+            <div class="center" id="login">
+                <h1>TIC TAC PRO</h1>
+                <hr>
+                <div>
+                    <form method="post">
+                        <p>Username:</p>
+                        <input type="text" id="textUsername">
+                        <p>Password:</p>
+                        <input type="password" id="textPassword">
+                        <p>
+                            <input type="button"
+                                   value="Login" id="buttonLogin">
+                            <input type="button"
+                                   value="Register" id="buttonRegister">
+                            <input type="button"
+                                   value="reset" id="buttonReset">
+                        </p>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="pageLobby" class="fullPage">
-        <div class="center" id="lobby">
-            <h1>Page 2: Lobby</h1>
-            <hr>
-            <div>
-                <form method="post">
-                    <p>
-                        <input type="button"
-                            value="Find Game" id="buttonFindgame">
-                        <span>Size: </span>
-                        <select id="sizeVal">
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
+        <div id="pageLobby" class="fullPage">
+            <div class="player"></div>
+            <div class="center" id="lobby">
+                <h1>Page 2: Lobby</h1>
+                <hr>
+                <div>
+                    <form method="post">
+                        <p>
+                            <input type="button"
+                                   value="Find Game" id="buttonFindgame">
+                            <span>Size: </span>
+                            <select id="sizeVal">
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </p>
+                        <p><span>Online Users: </span></p>
+                        <ul id="playList">
+                            
+                        </ul>
+                        <div class="bottom">
+                            <p>Status: <samp id="statusField">Unkown</samp></p>
+                            <input type="button"
+                                   value="Log out" id="buttonLogout">
+                        </div>
                         
-                    </p>
-                    <p>Status: <samp id="statusField">Unkown</samp></p>
-                    <input type="button"
-                            value="Log out" id="buttonLogout">
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="pageGame" class="fullPage">
-        <div class="center" id="game">
-            <h1>Page 3: Game</h1>
-            <hr>
-            <canvas id="gameCanvas"></canvas>
-            <div>
-                <p>Player Turn: <samp id="playerTurn">discoKungen</samp></p>
-                <input type="button" value="Back to lobby" id="buttonToLobby">
+        <div id="pageGame" class="fullPage">
+            <div class="player"></div>
+            <div class="center" id="game">
+                <h1>Page 3: Game</h1>
+                <hr>
+                <canvas id="gameCanvas"></canvas>
+                <div>
+                    <p>Player Turn: <samp id="playerTurn">discoKungen</samp></p>
+                    <input type="button" value="Back to lobby" id="buttonToLobby">
+                </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
