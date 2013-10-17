@@ -23,7 +23,7 @@ $(function () {
     
     $('#buttonLogout').click(lobbyController.logout);
     
-    $('#buttonToLobby').click(lobbyController.backToLobby);
+    $('#buttonToLobby').click(gameController.buttonToLobby);
     
 
     lobbyController.updatePlayerList();

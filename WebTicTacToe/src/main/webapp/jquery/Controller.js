@@ -88,10 +88,10 @@ var lobbyController = (function () {
 
 var gameController = (function () {
     return {
-        backToLobby : function () {
+        buttonToLobby : function () {
             //TODO 
             $("#pageGame").fadeOut(300, function () {
-                $("#pageLogin").fadeIn(300);
+                $("#pageLobby").fadeIn(300);
             });
         }
     };
