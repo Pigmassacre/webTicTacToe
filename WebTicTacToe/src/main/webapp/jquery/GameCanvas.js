@@ -11,10 +11,13 @@ var gameCanvas = function () {
     var kryss = new Image();
     
     function publicInit (canvasElem, ctxElem, size) {
+        
         canvas = canvasElem;
         ctxBg = ctxElem;
+        
         ctxBg.canvas.height = 400;
         ctxBg.canvas.width = 400;
+        clearCtxBg();
         total = size;
         box.src = 'images/box.png';
         box.addEventListener('load', imageLoaded, false);
@@ -26,13 +29,25 @@ var gameCanvas = function () {
         ring.addEventListener('load', imageLoaded, false);
         
         width = 400 / size;
+        
+        //Initializing board
+        for(var i = 0; i < size; i++){
+            board[i] = []; 
+            for(var j = 0; j < size; j++){
+                board[i][j] = 0;
+            } 
+        }
     }
     
     function publicFill (posX, posY, type) {
+        board[posX][posY] = type;
+        clearCtxBg();
+        drawGameBoard();
+    }
+
+    function publicReset(){
         
     }
-    
-    
     
     function imageLoaded()
     {
@@ -44,29 +59,24 @@ var gameCanvas = function () {
     }
     
     var pendingImages = 3;
-    var boxX = 0;
-    var boxY = 0;
     var width;
-    var total = 5;
-    var count = 1;
-    var a = [];
-    
-
+    var total;
+    var board = [];
     
     // main functions
     function drawGameBoard() {
-        
-        for(var i = 0; i < total; i++){ 
-            for(var j = 0; j < total; j++){
-                a[i] = []; 
-                a[i][j] = count;
-                count++;
-            } 
-        }
         for(var iw = 0; iw < total; iw++){
             for(var jw = 0; jw < total; jw++){
-                ctxBg.drawImage(box, boxX+(iw*width), boxY+(jw*width), width, width);
-                
+               ctxBg.drawImage(box, (iw*width), (jw*width), width, width);
+            }
+        } 
+        for(var iw = 0; iw < total; iw++){
+            for(var jw = 0; jw < total; jw++){
+                if (board[iw][jw] === gameCanvas.fillType.cross){
+                    ctxBg.drawImage(kryss, (iw*width), (jw*width), width, width);
+                } else if (board[iw][jw] === gameCanvas.fillType.circle){
+                    ctxBg.drawImage(ring, (iw*width), (jw*width), width, width); 
+                }
             }
         } 
     }
@@ -78,14 +88,19 @@ var gameCanvas = function () {
     }
     // end of main functions
     
+    function getPublicBoardSize () {
+        return total;
+    }
     
     return {
         init : publicInit,
-                fill : publicFill,
-                fillType : {
+        fill : publicFill,
+        reset : publicReset,
+        getBoardSize : getPublicBoardSize,
+        fillType : {
             cross : -1,
-                    free : 0,
-                    circle : 1
+            free : 0,
+            circle : 1
         }
     };
 }();

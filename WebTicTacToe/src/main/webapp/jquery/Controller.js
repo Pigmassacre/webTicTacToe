@@ -93,6 +93,15 @@ var gameController = (function () {
             $("#pageGame").fadeOut(300, function () {
                 $("#pageLobby").fadeIn(300);
             });
+        },
+        
+        mouseClick: function (canvas, evt) {
+            var rect = canvas[0].getBoundingClientRect(),
+                xPos = evt.clientX - rect.left,
+                yPos = evt.clientY - rect.top;
+            xPos = parseInt(xPos / (400 / gameCanvas.getBoardSize()), 10);
+            yPos = parseInt(yPos / (400 / gameCanvas.getBoardSize()), 10);
+            gameCanvas.fill(xPos, yPos, gameCanvas.fillType.cross);
         }
     };
 })();

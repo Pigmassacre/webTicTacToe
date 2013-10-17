@@ -25,7 +25,19 @@ $(function () {
     
     $('#buttonToLobby').click(gameController.buttonToLobby);
     
-
+    
+    
+    
+    /* FUUUULT */
+    var isDown = false;
+    $('canvas').on('mousedown', function (e) {
+        if (isDown === false) {
+            isDown = true;
+            gameController.mouseClick($('canvas'),e);
+            isDown = false;
+        }
+    });
+    
     lobbyController.updatePlayerList();
     /*
      * Fade in page
