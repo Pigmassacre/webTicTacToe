@@ -81,14 +81,14 @@ public class GameResource {
                 gameSessionMap.put(uuid.toString(), gameSession);
 
                 // Broadcast the UUID to the suspended requests that match both players names.
-                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(uuid.toString());
-                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(uuid.toString());
-
+                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
+                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
+                System.out.println("succeeded");
                 // Simply return an OK response, the UUID is broadcast to both relevant players above.
                 return Response.ok().build();
             }
         }
-        
+        System.out.println("failed");
         // Player matching that name not found, something terribly wrong has occured!
         return Response.status(400).build();
     }

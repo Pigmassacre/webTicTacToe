@@ -14,6 +14,8 @@ var Lobby = function () {
     var playerListSocket;
     var playerNameRequest;
     var playerNameSocket;
+    var gameRequest;
+    var gameSocket;
     
     function publicRegister (name, password, done, fail) {
         var request = $.ajax({url: baseuri + '/login/register',
@@ -71,8 +73,31 @@ var Lobby = function () {
 
             playerNameRequest.onMessage = function (response) {
                 var message = response.responseBody;
-                showGame(message);
-                console.log(message);
+                
+                try {
+                    var json = $.parseJSON(message);
+                } catch (e) {
+                    console.log('This doesn\'t look like a valid JSON: ', message);
+                    return;
+                }
+                
+                gameRequest = { url: baseuri + '/game/' + json.uuid,
+                    contentType : "application/json",
+                    logLevel : 'debug',
+                    transport : 'websocket' ,
+                    trackMessageLength : true,
+                    fallbackTransport: 'long-polling'};
+        
+                gameRequest.onOpen = function (response) {
+                    console.log('connected to game with UUID: ' + json.uuid);
+                };
+
+                gameRequest.onMessage = function (response) {
+                    console.log('got a gameresponse: ' + response);
+                    // HERE WE MANAGE GAME RESPONSES
+                };
+                
+                lobbyController.showGame(json.size);
             };
             
             playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
@@ -93,8 +118,7 @@ var Lobby = function () {
         var gameSession;
         
         var request = $.ajax({url: baseuri + '/game/findgame/' + size,
-                type: 'POST',
-                dataType: 'json'
+                type: 'POST'
         });
         
         request.done(function(data) {
