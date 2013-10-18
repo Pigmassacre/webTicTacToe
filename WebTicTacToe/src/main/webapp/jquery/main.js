@@ -13,6 +13,8 @@ $(function () {
      */
     $('#buttonLogin').click(loginController.login);
     
+    $('#buttonRegister').click(loginController.register);
+    
     $('#buttonReset').click(loginController.reset);
     
     $('#buttonRegister').click(loginController.register);
@@ -21,15 +23,26 @@ $(function () {
     
     $('#buttonLogout').click(lobbyController.logout);
     
-    $('#buttonToLobby').click(lobbyController.backToLobby);
+    $('#buttonToLobby').click(gameController.buttonToLobby);
     
-    /* Initializing Game Canvas  */
-    gameCanvas.init($('#gameCanvas'),
-        $('#gameCanvas')[0].getContext('2d'));
+    
+    
+    
+    /* FUUUULT */
+    var isDown = false;
+    $('canvas').on('mousedown', function (e) {
+        if (isDown === false) {
+            isDown = true;
+            gameController.mouseClick($('canvas'),e);
+            isDown = false;
+        }
+    });
+    
+    lobbyController.updatePlayerList();
     /*
      * Fade in page
      */
-    $("#pageLogin").fadeIn(1500);
+    $("#pageLogin").fadeIn(100);
     
     $("#pageGame").click(function () {
         

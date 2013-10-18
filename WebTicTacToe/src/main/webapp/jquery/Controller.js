@@ -15,6 +15,7 @@ var loginController  = (function () {
                 $("#pageLogin").fadeOut(500, function () {
                     $("#pageLobby").fadeIn(500);
                 });
+                lobbyController.showPlayer();
             }
         },
         reset : function () {
@@ -22,7 +23,13 @@ var loginController  = (function () {
             $('#textPassword').val('');
         },
         register : function () {
-            // TODO
+            var username = $("#textUsername").val();
+            var password = $("#textPassword").val();
+            if(debug || Lobby.register(username, password)){
+                $("#pageLogin").fadeOut(500, function () {
+                    $("#pageLobby").fadeIn(500);
+                });
+            }
         }
     };
 })();
@@ -37,18 +44,38 @@ var lobbyController = (function () {
     return {
         findGame : function () {
             var size = $('#sizeVal').val();
-            if(debug || Lobby.findGame(size)){
-                $("#pageLobby").fadeOut(500, function () {
-                    $("#pageGame").fadeIn(500);
+            Lobby.findGame(size, function () {
+                /* Initializing Game Canvas  */
+                gameCanvas.init($('#gameCanvas'),
+                    $('#gameCanvas')[0].getContext('2d'), size);
+                $("#pageLobby").fadeOut(300, function () {
+                    $("#pageGame").fadeIn(300);
                 });
-            } 
+            });
         },
         logout : function () {
             if(debug || Lobby.logout()){
-                $("#pageLobby").fadeOut(500, function () {
-                    $("#pageLogin").fadeIn(500);
+                $("#pageLobby").fadeOut(300, function () {
+                    $("#pageLogin").fadeIn(300);
                 });
             }
+        },
+        updatePlayerList : function () {
+            var playerList = Lobby.getPlayerList();
+            var list = $('#playList').html('');
+            for(var i = 0; i < playerList.length; i++) {
+                list.append('<li>' + playerList[i] + '</li>');
+            }
+            
+        },
+        showPlayer : function () {
+            var data = Lobby.getPlayerData();
+            //clear box
+            $('.player').html('');
+            $('.player').append(
+                    "<span>Logged in as: " + data.name + "</span><br>" +
+                    "<span>Score: " + data.score + "</span>"
+        );
         }
     };
 })();
@@ -61,11 +88,20 @@ var lobbyController = (function () {
 
 var gameController = (function () {
     return {
-        backToLobby : function () {
+        buttonToLobby : function () {
             //TODO 
-            $("#pageGame").fadeOut(500, function () {
-                $("#pageLogin").fadeIn(500);
+            $("#pageGame").fadeOut(300, function () {
+                $("#pageLobby").fadeIn(300);
             });
+        },
+        
+        mouseClick: function (canvas, evt) {
+            var rect = canvas[0].getBoundingClientRect(),
+                xPos = evt.clientX - rect.left,
+                yPos = evt.clientY - rect.top;
+            xPos = parseInt(xPos / (400 / gameCanvas.getBoardSize()), 10);
+            yPos = parseInt(yPos / (400 / gameCanvas.getBoardSize()), 10);
+            gameCanvas.fill(xPos, yPos, gameCanvas.fillType.cross);
         }
     };
 })();

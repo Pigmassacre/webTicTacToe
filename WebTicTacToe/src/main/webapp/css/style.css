@@ -1,3 +1,6 @@
+* {
+    padding:0 0 0 0;
+}
 h1 {
     color: black;
 }
@@ -6,6 +9,7 @@ body {
     background-color: white;
     font-family:sans-serif;
     padding:0 0 0 0;
+    margin: 0 0 0 0 ;
 }
 
 p {
@@ -43,9 +47,9 @@ div.center{
 div#login{
     
     margin-left: -150px;
-    margin-top: -175px;
+    margin-top: -150px;
     width: 300px;
-    height: 350px;
+    height: 300px;
     top: 50%;
     left: 50%;
 }
@@ -57,9 +61,9 @@ div#pageLobby{
 
 div#lobby{
     margin-left: -150px;
-    margin-top: -100px;
+    margin-top: -200px;
     width: 300px;
-    height: 200px;
+    height: 400px;
     top: 50%;
     left: 50%;
 }
@@ -83,4 +87,26 @@ canvas{
     border-width: 1px;
     width: 400px;
     height:400px;
+}
+
+ul {
+    display: block;
+    list-style-type: none;
+}
+
+li {
+    font-family: monospace;
+}
+
+.bottom{
+    display: inline-block;
+    float: bottom;
+}
+
+div.player{
+    border-color:black;
+    border-style:solid;
+    border-width: 1px;
+    width: 250px;
+    font-family: monospace;
 }
