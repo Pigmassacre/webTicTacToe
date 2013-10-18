@@ -11,12 +11,16 @@ var loginController  = (function () {
         login : function () {
             var username = $("#textUsername").val();
             var password = $("#textPassword").val();
-            if(debug || Lobby.login(username, password)){
+            Lobby.login(username, password, 
+            function(data) {
                 $("#pageLogin").fadeOut(500, function () {
                     $("#pageLobby").fadeIn(500);
                 });
-                lobbyController.showPlayer();
-            }
+                lobbyController.showPlayer(data);
+            }, 
+            function(jqXHR, textStatus) {
+                console.log($.parseJSON(jqXHR.responseText).message);
+            });
         },
         reset : function () {
             $('#textUsername').val('');
@@ -25,11 +29,12 @@ var loginController  = (function () {
         register : function () {
             var username = $("#textUsername").val();
             var password = $("#textPassword").val();
-            if(debug || Lobby.register(username, password)){
-                $("#pageLogin").fadeOut(500, function () {
-                    $("#pageLobby").fadeIn(500);
-                });
-            }
+            Lobby.register(username, password, function(data) {
+                loginController.login();
+            },
+            function(jqXHR, textStatus) {
+                console.log($.parseJSON(jqXHR.responseText).message);
+            });
         }
     };
 })();
@@ -54,11 +59,13 @@ var lobbyController = (function () {
             });
         },
         logout : function () {
-            if(debug || Lobby.logout()){
-                $("#pageLobby").fadeOut(300, function () {
+            Lobby.logout(function(data) {
+               $("#pageLobby").fadeOut(300, function () {
                     $("#pageLogin").fadeIn(300);
                 });
-            }
+            }, function(jqXHR, textStatus) {
+                console.log($.parseJSON(jqXHR.responseText).message);
+            });
         },
         updatePlayerList : function () {
             var playerList = Lobby.getPlayerList();
@@ -69,12 +76,12 @@ var lobbyController = (function () {
             
         },
         showPlayer : function () {
-            var data = Lobby.getPlayerData();
+            //var data = Lobby.getPlayerData();
             //clear box
             $('.player').html('');
             $('.player').append(
-                    "<span>Logged in as: " + data.name + "</span><br>" +
-                    "<span>Score: " + data.score + "</span>"
+                    "<span>Logged in as: " + $.cookie('name') + "</span><br>"// +
+                    //"<span>Score: " + data.score + "</span>"
         );
         }
     };

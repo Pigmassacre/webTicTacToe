@@ -4,25 +4,56 @@
  */
 
 var Lobby = function () {
+    var baseuri = document.location.toString() + 'lobby';
     var playerList = ['Player 1','Player 2'];
-    var player = {
-        name : 'discoKungen',
-        score : 123
-    };
     
-    function publicRegister () {
+    function publicRegister (name, password, done, fail) {
+        var request = $.ajax({url: baseuri + '/login/register',
+                type: 'POST',
+                data: $.stringifyJSON({ name: name, password: password }),
+                contentType: 'application/json',
+                dataType: 'json'
+        });
         
-        return true;
+        request.done(function(data) {
+            done(data);
+        });
+        
+        request.fail(function(jqXHR, textStatus) {
+           fail(jqXHR, textStatus);
+        });
     }
     
-    function publicLogout () {
+    function publicLogout (done, fail) {
+        var request = $.ajax({url: baseuri + '/logout',
+                type: 'POST',
+                dataType: 'json'
+        });
         
-        return true;
+        request.done(function(data) {
+            done(data);
+        });
+        
+        request.fail(function(jqXHR, textStatus) {
+           fail(jqXHR, textStatus);
+        });
     }
     
-    function publicLogin(name, password){
+    function publicLogin(name, password, done, fail){
+        var request = $.ajax({url: baseuri + '/login',
+                type: 'POST',
+                data: $.stringifyJSON({ name: name, password: password }),
+                contentType: 'application/json',
+                dataType: 'json'
+        });
         
-        return true;
+        request.done(function(data) {
+            done(data);
+        });
+        
+        request.fail(function(jqXHR, textStatus) {
+           fail(jqXHR, textStatus);
+        });
     }
     
     function publicFindGame(size, done){
@@ -36,10 +67,10 @@ var Lobby = function () {
     function getPublicPlayerList(){
         return playerList;
     }
-    
+    /*
     function getPublicPlayerData(){
         return player;
-    }
+    }*/
     
     return {
         login : publicLogin,
@@ -47,7 +78,7 @@ var Lobby = function () {
         register : publicRegister,
         findGame : publicFindGame,
         getPlayerList : getPublicPlayerList,
-        getPlayerData : getPublicPlayerData
+        /*getPlayerData : getPublicPlayerData*/
         
     };
 }();
