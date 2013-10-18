@@ -28,7 +28,7 @@ public class PlayerResource {
         return "";
     }
     
-    @POST
+    @GET
     @Produces("application/json")
     @Path("/{name}/info")
     public Response getPlayerInformation(@PathParam(value = "name") String name) {

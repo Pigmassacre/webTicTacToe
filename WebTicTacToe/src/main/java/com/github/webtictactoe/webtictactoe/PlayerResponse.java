@@ -21,8 +21,10 @@ public class PlayerResponse {
         switch (mark) {
             case CIRCLE:
                 markAsChar = 'O'; // a big o (not a 0 or anything silly like that!)
+                break;
             case CROSS:
                 markAsChar = 'X'; // a big x
+                break;
         }
         
         this.mark = markAsChar;

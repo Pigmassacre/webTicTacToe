@@ -107,33 +107,12 @@ public class GameResource {
             
             // If the move is successful, we convert the new gameboard to a response-friendly format.
             if (successfulMove) {
-                // The gameboard given by the session.
-                Mark[][] gameBoard = gameSession.getBoard();
-                
-                // The gameboard that we are to return in the response.
-                Character[][] responseGameBoard = new Character[gameBoard.length][gameBoard[0].length];
-                
-                // We loop through the gameboard and converts all Mark enums to string representations.
-                // Could possibly do this in a smarter way...
-                for (int x = 0; x < gameBoard.length; x++) {
-                    for (int y = 0; y < gameBoard[x].length; y++) {
-                        switch (gameBoard[x][y]) {
-                            case EMPTY:
-                                responseGameBoard[x][y] = '\0'; // the null character
-                            case CIRCLE:
-                                responseGameBoard[x][y] = 'O'; // a big o (not a 0 or anything silly like that!)
-                            case CROSS:
-                                responseGameBoard[x][y] = 'X'; // a big x
-                        }
-                    }
-                }
-                
                 // The move was successful, so we return an OK response together with the state of the board, and the name
                 // of the player who played last. We also return true if the game was won, or false if it was not.
                 // If the game was won, the given name will match to the winning player.
                 return Response
                         .ok()
-                        .entity(new GameResponse(givenPlayer.getName(), responseGameBoard, gameSession.gameWon()))
+                        .entity(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.gameWon()))
                         .build();
             }
         }
