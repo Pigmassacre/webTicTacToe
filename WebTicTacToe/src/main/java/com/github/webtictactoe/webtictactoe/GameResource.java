@@ -28,7 +28,7 @@ import org.atmosphere.jersey.Broadcastable;
 public class GameResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
-    private static HashMap<UUID, GameSession> gameSessionMap = new HashMap<UUID, GameSession>();
+    private static HashMap<String, GameSession> gameSessionMap = new HashMap<String, GameSession>();
     // We know the name of the player of the request by the use of cookies!
     private @CookieParam(value = "name") String name;
     
@@ -36,7 +36,7 @@ public class GameResource {
     @Suspend(contentType = "application/json")
     @Path("/{id}")
     public Broadcastable suspend(@PathParam(value = "id") Broadcaster id) {
-        if (gameSessionMap.containsKey(id)) {
+        if (gameSessionMap.containsKey(id.getID())) {
             System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
             System.out.println("Given UUID does NOT match a gamesession!");
@@ -78,10 +78,7 @@ public class GameResource {
                 UUID uuid = UUID.randomUUID();
 
                 // Map the new gamesession to the new uuid.
-                gameSessionMap.put(uuid, gameSession);
-                System.out.println(gameSession);
-                System.out.println(gameSession.getPlayerOne());
-                System.out.println(gameSession.getPlayerTwo());
+                gameSessionMap.put(uuid.toString(), gameSession);
 
                 // Broadcast the UUID to the suspended requests that match both players names.
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(uuid.toString());
