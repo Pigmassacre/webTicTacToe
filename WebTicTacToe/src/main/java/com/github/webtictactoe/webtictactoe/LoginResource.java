@@ -15,8 +15,7 @@ public class LoginResource {
     
     /**
      * A REST method that, given a loginMessage (basically a JSON object that looks like this { name: name, password: password })
-     * tries to login the Player with the given credentials. If no player matches those credentials, those credentials are used
-     * to create a new Player that is then logged in.
+     * tries to login the Player with the given credentials.
      * 
      * @param loginMessage the JSON object that contains the credentials
      * @return a Jersey response object
@@ -25,13 +24,11 @@ public class LoginResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response login(LoginMessage loginMessage) {
-        Boolean success;
-        
         System.out.println("login() called with data: " + loginMessage.name + " / " + loginMessage.password);
         
         if (!loginMessage.name.isEmpty() && !loginMessage.password.isEmpty()) {
             // As long as the name and password aren't empty, we try to login.
-            success = lobby.login(loginMessage.name, loginMessage.password);
+            Boolean success = lobby.login(loginMessage.name, loginMessage.password);
             if(success) {
                 return Response
                         .ok()
@@ -39,22 +36,50 @@ public class LoginResource {
                         .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
                         .build();
             } else {
-                // Login failed, so we try to register a new user with these credentials instead.
-                success = lobby.register(loginMessage.name, loginMessage.password);
-                
-                if (success) {
-                    lobby.login(loginMessage.name, loginMessage.password);
-                    return Response
-                            .ok()
-                            .entity(new LoginResponse("You have been registered!"))
-                            .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
-                            .build();
-                } else {
-                    return Response
-                            .status(400)
-                            .entity(new LoginResponse("That password doesn't match that username, try again!"))
-                            .build();
-                }
+                return Response
+                        .status(400)
+                        .entity(new LoginResponse("That password doesn't match that username, try again!"))
+                        .build();
+            }
+        } else {
+            // If the name and / or password is empty, the user is denied to login.
+            return Response
+                    .status(400)
+                    .entity(new LoginResponse("Name and / or password cannot be empty!"))
+                    .build();
+        }
+    }
+    
+    /**
+     * A REST method that, given a loginMessage (basically a JSON object that looks like this { name: name, password: password })
+     * tries to register a player with the given credentials.
+     * 
+     * @param loginMessage the JSON object that contains the credentials
+     * @return a Jersey response object
+     */
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("/register")
+    public Response register(LoginMessage loginMessage) {
+        System.out.println("register() called with data: " + loginMessage.name + " / " + loginMessage.password);
+        
+        if (!loginMessage.name.isEmpty() && !loginMessage.password.isEmpty()) {
+            // We try to register a new user with these credentials instead.
+            Boolean success = lobby.register(loginMessage.name, loginMessage.password);
+
+            if (success) {
+                lobby.login(loginMessage.name, loginMessage.password);
+                return Response
+                        .ok()
+                        .entity(new LoginResponse("You have been registered!"))
+                        .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
+                        .build();
+            } else {
+                return Response
+                        .status(400)
+                        .entity(new LoginResponse("That username is already taken."))
+                        .build();
             }
         } else {
             // If the name and / or password is empty, the user is denied registration.
