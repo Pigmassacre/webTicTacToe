@@ -97,8 +97,8 @@ public class GameResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/{id}")
-    public Response broadcastGamestate(@PathParam(value = "id") UUID id, GameMessage gameMessage) {
-        GameSession gameSession = gameSessionMap.get(id.toString());
+    public Broadcastable broadcastGamestate(@PathParam(value = "id") Broadcaster id, GameMessage gameMessage) {
+        GameSession gameSession = gameSessionMap.get(id.getID());
         
         System.out.println("Got a gameMessage: " + gameMessage);
         
@@ -115,17 +115,12 @@ public class GameResource {
                 // The move was successful, so we return an OK response together with the state of the board, and the name
                 // of the player who played last. We also return true if the game was won, or false if it was not.
                 // If the game was won, the given name will match to the winning player.
-                return Response
-                        .ok()
-                        .entity(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.gameWon()))
-                        .build();
+                return new Broadcastable(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.gameWon()), "", id);
             }
         }
         
-        // Something went wrong, so we simply return the 400 status code.
-        return Response
-                .status(400)
-                .build();
+        // Move wasn't successful or player wasn't found.
+        return new Broadcastable("Something went wrong.", "", id); // TODO: Add a GameErrorResponse perhaps?
     }
     
 }
