@@ -51,11 +51,6 @@ var lobbyController = (function () {
             var size = $('#sizeVal').val();
             Lobby.findGame(size, function () {
                 /* Initializing Game Canvas  */
-                gameCanvas.init($('#gameCanvas'),
-                    $('#gameCanvas')[0].getContext('2d'), size);
-                $("#pageLobby").fadeOut(300, function () {
-                    $("#pageGame").fadeIn(300);
-                });
             }, function() {
                 console.log('failed in controller');
             });
@@ -83,6 +78,13 @@ var lobbyController = (function () {
                     "<span>Logged in as: " + $.cookie('name') + "</span><br>"// +
                     //"<span>Score: " + data.score + "</span>"
         );
+        },
+        showGame : function (size) {
+            gameCanvas.init($('#gameCanvas'),
+                $('#gameCanvas')[0].getContext('2d'), size);
+            $("#pageLobby").fadeOut(300, function () {
+                $("#pageGame").fadeIn(300);
+            });
         }
     };
 })();

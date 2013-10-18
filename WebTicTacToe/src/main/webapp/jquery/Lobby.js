@@ -71,17 +71,8 @@ var Lobby = function () {
 
             playerNameRequest.onMessage = function (response) {
                 var message = response.responseBody;
-                try {
-                    var json = $.parseJSON(message);
-                } catch (e) {
-                    console.log('This doesn\'t look like a valid JSON: ', message);
-                    return;
-                }
-
-                console.log('in playernamerequest');
+                showGame(message);
                 console.log(message);
-                console.log(json);
-                console.log(json.id);
             };
             
             playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
