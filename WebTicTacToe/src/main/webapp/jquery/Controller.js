@@ -110,7 +110,14 @@ var gameController = (function () {
                 yPos = evt.clientY - rect.top;
             xPos = parseInt(xPos / (400 / gameCanvas.getBoardSize()), 10);
             yPos = parseInt(yPos / (400 / gameCanvas.getBoardSize()), 10);
+            if(Lobby.sendGameMove(xPos,yPos)){
+                
+            }
             gameCanvas.fill(xPos, yPos, gameCanvas.fillType.cross);
+        },
+                
+        updateGameBoard: function(gameboard) {
+            
         }
     };
 })();

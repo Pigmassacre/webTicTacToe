@@ -26,8 +26,7 @@ public class PlayerResource {
     @Suspend(contentType = "application/json")
     @Path("/{name}")
     public Broadcastable suspend(@PathParam(value = "name") Broadcaster name) {
-        System.out.println("Suspending response for /player/" + name);
-        System.out.println("Broadcaster ID is: " + name.getID());
+        System.out.println("Suspending response for /player/" + name.getID());
         return new Broadcastable("", name);
     }
     
@@ -37,10 +36,10 @@ public class PlayerResource {
     public Response getPlayerInformation(@PathParam(value = "name") String name) {
         for (Player player: lobby.getPlayerRegistry().getByName(name)) {
             Integer score = player.getScore();
-            Mark mark = player.getMark();
+            //Mark mark = player.();
             return Response
                     .ok()
-                    .entity(new PlayerResponse(name, score, mark))
+                    .entity(new PlayerResponse(name, score))
                     .build();
         }
         return Response

@@ -26,6 +26,7 @@ public class GameResponse {
         // Could possibly do this in a smarter way...
         for (int x = 0; x < gameBoard.length; x++) {
             for (int y = 0; y < gameBoard[x].length; y++) {
+                System.out.println("gameboard[" + x + "][" + y + "] is: " + gameBoard[x][y]);
                 switch (gameBoard[x][y]) {
                     case EMPTY:
                         responseGameBoard[x][y] = '\0'; // the null character

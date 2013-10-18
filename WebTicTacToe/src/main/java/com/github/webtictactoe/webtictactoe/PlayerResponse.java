@@ -12,7 +12,7 @@ public class PlayerResponse {
     public String name;
     public Integer score;
     public Character mark;
-
+    /*
     public PlayerResponse(String name, Integer score, Mark mark) {
         this.name = name;
         this.score = score;
@@ -28,6 +28,11 @@ public class PlayerResponse {
         }
         
         this.mark = markAsChar;
+    }*/
+    
+    public PlayerResponse(String name, Integer score) {
+        this.name = name;
+        this.score = score;
     }
 
     public PlayerResponse() {

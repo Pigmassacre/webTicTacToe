@@ -94,8 +94,23 @@ var Lobby = function () {
 
                 gameRequest.onMessage = function (response) {
                     console.log('got a gameresponse: ' + response);
-                    // HERE WE MANAGE GAME RESPONSES
+                    
+                    var message = response.responseBody;
+                
+                    try {
+                        var json = $.parseJSON(message);
+                    } catch (e) {
+                        console.log('This doesn\'t look like a valid JSON: ', message);
+                        return;
+                    }
+                    
+                    console.log(json.gameboard);
+                    
+                    //gameController.updateGameBoard(gameboard);
                 };
+                
+                console.log('subscribing to gamerequest');
+                gameSocket = $.atmosphere.subscribe(gameRequest);
                 
                 lobbyController.showGame(json.size);
             };
@@ -159,12 +174,16 @@ var Lobby = function () {
         lobbyController.updatePlayerList(json.names);
     };
     
+    function publicSendGameMove(xPos, yPos) {
+        gameSocket.push($.stringifyJSON({ xPos: xPos, yPos: yPos }));
+    }
+    
     return {
         login : publicLogin,
         logout : publicLogout,
         register : publicRegister,
-        findGame : publicFindGame
-        
+        findGame : publicFindGame,
+        sendGameMove : publicSendGameMove
     };
 }();
 

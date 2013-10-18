@@ -72,7 +72,7 @@ public class GameResource {
             
             // Find a game.
             GameSession gameSession = lobby.findGame(givenPlayer, size);
-            
+            System.out.println("mark of " + givenPlayer.getName() + ": " + gameSession.getMarkForPlayer(givenPlayer));
             if (gameSession != null) {
                 // Generate a new UUID.
                 UUID uuid = UUID.randomUUID();
@@ -83,12 +83,11 @@ public class GameResource {
                 // Broadcast the UUID to the suspended requests that match both players names.
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
-                System.out.println("succeeded");
+                
                 // Simply return an OK response, the UUID is broadcast to both relevant players above.
                 return Response.ok().build();
             }
         }
-        System.out.println("failed");
         // Player matching that name not found, something terribly wrong has occured!
         return Response.status(400).build();
     }
@@ -97,15 +96,17 @@ public class GameResource {
     @Broadcast(writeEntity = false)
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("/{id}/move")
+    @Path("/{id}")
     public Response broadcastGamestate(@PathParam(value = "id") UUID id, GameMessage gameMessage) {
-        GameSession gameSession = gameSessionMap.get(id);
+        GameSession gameSession = gameSessionMap.get(id.toString());
+        
+        System.out.println("Got a gameMessage: " + gameMessage);
         
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
             // Take the first matching player.
             Player givenPlayer = player;
-        
+            System.out.println("mark of " + givenPlayer.getName() + ": " + gameSession.getMarkForPlayer(givenPlayer));
             // Try to make a move to the given position with the given player.
             Boolean successfulMove = gameSession.move(gameMessage.xPos, gameMessage.yPos, givenPlayer);
             
