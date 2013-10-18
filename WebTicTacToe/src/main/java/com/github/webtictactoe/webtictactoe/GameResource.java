@@ -114,7 +114,7 @@ public class GameResource {
                 Character[][] responseGameBoard = new Character[gameBoard.length][gameBoard[0].length];
                 
                 // We loop through the gameboard and converts all Mark enums to string representations.
-                // Could possibly do this in a smarter way perhaps, 
+                // Could possibly do this in a smarter way...
                 for (int x = 0; x < gameBoard.length; x++) {
                     for (int y = 0; y < gameBoard[x].length; y++) {
                         switch (gameBoard[x][y]) {
