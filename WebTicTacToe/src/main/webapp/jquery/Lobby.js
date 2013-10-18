@@ -11,7 +11,9 @@ var Lobby = function () {
                     transport : 'websocket' ,
                     trackMessageLength : true,
                     fallbackTransport: 'long-polling'};
-    var subSocket;
+    var playerListSocket;
+    var playerNameRequest;
+    var playerNameSocket;
     
     function publicRegister (name, password, done, fail) {
         var request = $.ajax({url: baseuri + '/login/register',
@@ -37,7 +39,7 @@ var Lobby = function () {
         });
         
         request.done(function(data) {
-            subSocket.push();
+            playerListSocket.push();
             $.atmosphere.unsubscribe(playerListRequest);
             done(data);
         });
@@ -56,11 +58,38 @@ var Lobby = function () {
         });
         
         request.done(function(data) {
-            subSocket = $.atmosphere.subscribe(playerListRequest);
+            playerNameRequest = { url: baseuri + '/player/' + $.cookie('name'),
+                    contentType : "application/json",
+                    logLevel : 'debug',
+                    transport : 'websocket' ,
+                    trackMessageLength : true,
+                    fallbackTransport: 'long-polling'};
+                
+            playerNameRequest.onOpen = function (response) {
+                console.log('connected to playernamerequest');
+            };
+
+            playerNameRequest.onMessage = function (response) {
+                var message = response.responseBody;
+                try {
+                    var json = $.parseJSON(message);
+                } catch (e) {
+                    console.log('This doesn\'t look like a valid JSON: ', message);
+                    return;
+                }
+
+                console.log('in playernamerequest');
+                console.log(message);
+                console.log(json);
+                console.log(json.id);
+            };
+            
+            playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
+            playerListSocket = $.atmosphere.subscribe(playerListRequest);
             // This push here is to update the playerlist for all connected players.
             // Seems to be a bug with atmosphere, so have to set timeout for it... :/
-            setTimeout(subSocket.push, 1000);
-            //subSocket.push();
+            setTimeout(playerListSocket.push, 1000);
+            //playerListSocket.push();
             done(data);
         });
         
@@ -69,16 +98,30 @@ var Lobby = function () {
         });
     }
     
-    function publicFindGame(size, done){
+    function publicFindGame(size, done, fail){
         var gameSession;
+        
+        var request = $.ajax({url: baseuri + '/game/findgame/' + size,
+                type: 'POST',
+                dataType: 'json'
+        });
+        
+        request.done(function(data) {
+            console.log('found game');
+            done(data);
+        });
+        
+        request.fail(function(jqXHR, textStatus) {
+            console.log('failed to find game');
+            fail(jqXHR, textStatus);
+        });
         
         //Called when game is found
         done(gameSession);
-        return true;
     }
     
     playerListRequest.onOpen = function (response) {
-        console.log('connected');
+        console.log('connected to playerlistrequest');
     };
     
     playerListRequest.onMessage = function (response) {
@@ -95,6 +138,8 @@ var Lobby = function () {
         if (typeof json.names === 'string') {
             json.names = [json.names];
         }
+        
+        console.log('in playerlistrequest');
         
         lobbyController.updatePlayerList(json.names);
     };

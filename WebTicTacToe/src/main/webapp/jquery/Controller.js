@@ -56,6 +56,8 @@ var lobbyController = (function () {
                 $("#pageLobby").fadeOut(300, function () {
                     $("#pageGame").fadeIn(300);
                 });
+            }, function() {
+                console.log('failed in controller');
             });
         },
         logout : function () {

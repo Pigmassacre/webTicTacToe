@@ -19,7 +19,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.jersey.Broadcastable;
 
 @Path("/game")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
@@ -33,7 +35,7 @@ public class GameResource {
     @GET
     @Suspend(contentType = "application/json")
     @Path("/{id}")
-    public String suspend(@PathParam(value = "id") UUID id) {
+    public Broadcastable suspend(@PathParam(value = "id") Broadcaster id) {
         if (gameSessionMap.containsKey(id)) {
             System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
@@ -41,7 +43,7 @@ public class GameResource {
         }
         
         System.out.println("Anyway, suspending response for " + name);
-        return "";
+        return new Broadcastable("", id);
     }
     
     /**
@@ -60,9 +62,9 @@ public class GameResource {
      * @return a UUID that can be used to communicate with the matching gamesession.
      */
     @POST
-    @Produces("application/json")
     @Path("/findgame/{size}")
     public Response findGame(@PathParam(value = "size") Integer size) {
+        System.out.println("Trying to find a game for " + name + " of size " + size);
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
             // Take the first matching player.
@@ -71,18 +73,23 @@ public class GameResource {
             // Find a game.
             GameSession gameSession = lobby.findGame(givenPlayer, size);
             
-            // Generate a new UUID.
-            UUID uuid = UUID.randomUUID();
-            
-            // Map the new gamesession to the new uuid.
-            gameSessionMap.put(uuid, gameSession);
-            
-            // Broadcast the UUID to the suspended requests that match both players names.
-            BroadcasterFactory.getDefault().lookup("/" + gameSession.getPlayerOne().getName()).broadcast(uuid);
-            BroadcasterFactory.getDefault().lookup("/" + gameSession.getPlayerTwo().getName()).broadcast(uuid);
-            
-            // Simply return an OK response, the UUID is broadcast to both relevant players above.
-            return Response.ok().build();
+            if (gameSession != null) {
+                // Generate a new UUID.
+                UUID uuid = UUID.randomUUID();
+
+                // Map the new gamesession to the new uuid.
+                gameSessionMap.put(uuid, gameSession);
+                System.out.println(gameSession);
+                System.out.println(gameSession.getPlayerOne());
+                System.out.println(gameSession.getPlayerTwo());
+
+                // Broadcast the UUID to the suspended requests that match both players names.
+                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(uuid.toString());
+                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(uuid.toString());
+
+                // Simply return an OK response, the UUID is broadcast to both relevant players above.
+                return Response.ok().build();
+            }
         }
         
         // Player matching that name not found, something terribly wrong has occured!
