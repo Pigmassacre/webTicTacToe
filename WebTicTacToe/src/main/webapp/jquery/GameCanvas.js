@@ -1,7 +1,10 @@
 /* Reveal Pattern
  * 
  */
+
+
 var gameCanvas = function () {
+    
     
     
     var canvas;
@@ -10,8 +13,12 @@ var gameCanvas = function () {
     var ring = new Image();
     var kryss = new Image();
     
+    var pendingImages = 3;
+    var width;
+    var total;
+    var board = [];
+    
     function publicInit (canvasElem, ctxElem, size) {
-        
         canvas = canvasElem;
         ctxBg = ctxElem;
         
@@ -19,6 +26,7 @@ var gameCanvas = function () {
         ctxBg.canvas.width = 400;
         clearCtxBg();
         total = size;
+
         box.src = 'images/box.png';
         box.addEventListener('load', imageLoaded, false);
         
@@ -27,15 +35,19 @@ var gameCanvas = function () {
         
         ring.src = 'images/ring.png';
         ring.addEventListener('load', imageLoaded, false);
-        
         width = 400 / size;
         
+        
+            
         //Initializing board
         for(var i = 0; i < size; i++){
             board[i] = []; 
             for(var j = 0; j < size; j++){
                 board[i][j] = 0;
             } 
+        }
+        if (pendingImages === 0) {
+            drawGameBoard();
         }
     }
     
@@ -58,10 +70,7 @@ var gameCanvas = function () {
         }
     }
     
-    var pendingImages = 3;
-    var width;
-    var total;
-    var board = [];
+
     
     // main functions
     function drawGameBoard() {

@@ -110,3 +110,7 @@ div.player{
     width: 250px;
     font-family: monospace;
 }
+
+div#playerListBox{
+    height: 180px;
+}
