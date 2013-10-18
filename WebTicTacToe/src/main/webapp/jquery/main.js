@@ -38,7 +38,6 @@ $(function () {
         }
     });
     
-    lobbyController.updatePlayerList();
     /*
      * Fade in page
      */

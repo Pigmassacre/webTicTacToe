@@ -67,8 +67,7 @@ var lobbyController = (function () {
                 console.log($.parseJSON(jqXHR.responseText).message);
             });
         },
-        updatePlayerList : function () {
-            var playerList = Lobby.getPlayerList();
+        updatePlayerList : function (playerList) {
             var list = $('#playList').html('');
             for(var i = 0; i < playerList.length; i++) {
                 list.append('<li>' + playerList[i] + '</li>');
@@ -76,7 +75,6 @@ var lobbyController = (function () {
             
         },
         showPlayer : function () {
-            //var data = Lobby.getPlayerData();
             //clear box
             $('.player').html('');
             $('.player').append(
