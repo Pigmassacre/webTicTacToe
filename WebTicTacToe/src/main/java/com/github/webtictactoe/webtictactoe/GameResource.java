@@ -108,11 +108,11 @@ public class GameResource {
             
             // If the move is successful, we convert the new gameboard to a response-friendly format.
             if (successfulMove) {
-                // Broadcast the name of the last playing player, the state of the board and, if available, the name of the winner.
+                // Broadcast the name of the active player, the state of the board and, if available, the name of the winner.
                 if (gameSession.getWinner() == null) {
-                    id.broadcast(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), "Undecided"));
+                    id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), "Undecided"));
                 } else {
-                    id.broadcast(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.getWinner().getName()));
+                    id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), gameSession.getWinner().getName()));
                 }
                 
                 // The move was successful, so we return an OK response.

@@ -60,6 +60,10 @@ public class GameSession {
         return winner;
     }
     
+    public Player getActivePlayer() {
+        return activePlayer;
+    }
+    
     public Player getPlayerOne() {
         return p1;
     }

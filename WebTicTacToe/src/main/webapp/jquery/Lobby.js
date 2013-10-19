@@ -101,8 +101,15 @@ var Lobby = function () {
                         return;
                     }
                     
-                    console.log('winner is: ' + json.winner);
-                    console.log(json.gameBoard);
+                    $('#playerTurn').html(json.activePlayer);
+                    
+                    if (json.winner !== "Undecided") {
+                        if ($.cookie('name') === json.winner) {
+                            console.log('you won!!! :)');
+                        } else {
+                            console.log('you lost! :(');
+                        }
+                    }
                     
                     gameController.updateGameBoard(json.gameBoard);
                 };
@@ -166,19 +173,10 @@ var Lobby = function () {
     };
     
     function publicSendGameMove(xPos, yPos) {
-        //gameSocket.push($.stringifyJSON({ xPos: xPos, yPos: yPos }));
         var request = $.ajax({url: gameRequest.url,
                 type: 'POST',
                 data: $.stringifyJSON({ xPos: xPos, yPos: yPos }),
                 contentType: 'application/json'
-        });
-        
-        request.done(function(data) {
-            console.log('game move was accepted');
-        });
-        
-        request.fail(function(jqXHR, textStatus) {
-           console.log('game move was not accepted');
         });
     };
     

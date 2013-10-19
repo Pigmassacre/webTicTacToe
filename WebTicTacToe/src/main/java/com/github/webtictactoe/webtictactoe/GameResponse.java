@@ -9,12 +9,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GameResponse {
 
-    public String name;
+    public String activePlayer;
     public Integer[][] gameBoard;
     public String winner;
 
-    public GameResponse(String name, Mark[][] gameBoard, String winner) {
-        this.name = name;
+    public GameResponse(String activePlayer, Mark[][] gameBoard, String winner) {
+        this.activePlayer = activePlayer;
         this.winner = winner;
         
         // The gameboard that we are to return in the response.
