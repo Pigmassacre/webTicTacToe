@@ -6,12 +6,10 @@ package com.github.webtictactoe.tictactoe.core;
  */
 public interface IGame {
     
-    public void move(int x, int y, Game.Mark mark);
+    public Game.Mark move(int x, int y, Game.Mark mark);
     
-    public boolean isFree(int x,int y);
+    public boolean isFree(int x, int y);
     
     public Game.Mark[][] getBoard();
-    
-    public boolean gameWon();
 
 }

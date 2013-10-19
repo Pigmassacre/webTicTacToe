@@ -39,76 +39,59 @@ public class Game implements IGame {
     }
     
     @Override
-    public void move(int x, int y, Mark mark) {
+    public Mark move(int x, int y, Mark mark) {
         board[x][y] = mark;
-    }
-
-    @Override
-    public Mark[][] getBoard() {
-        return board;
+        
+        // Check if mark has won for the row mark was placed in
+        for (int i = 0; i < board.length; i++){
+            if (!board[x][i].equals(mark)) {
+                break;
+            }
+            if (i == board.length - 1) {
+                return mark;
+            }
+        }
+        
+        // Check if mark has won for the column mark was placed in
+        for (int i = 0; i < board.length; i++){
+            if (!board[i][y].equals(mark)) {
+                break;
+            }
+            if (i == board.length - 1) {
+                return mark;
+            }
+        }
+        
+        // If we're on the normal diagonal
+        if (x == y) {
+            // Check if mark has won for the normal diagonal
+            for (int i = 0; i < board.length; i++) {
+                if (!board[i][i].equals(mark)) {
+                    break;
+                }
+                if (i == board.length - 1) {
+                    return mark;
+                }
+            }
+        }
+        
+        // Check if mark has won for the antidiagonal mark was placed in
+        for (int i = 0; i < board.length; i++){
+            if (!board[i][(board.length - 1) - i].equals(mark)) {
+                break;
+            }
+            if (i == board.length - 1) {
+                return mark;
+            }
+        }
+        
+        // If mark didn't win, we return the EMPTY mark.
+        return Mark.EMPTY;
     }
     
     @Override
-    public boolean gameWon(){
-        Mark mark;
-        boolean won = true;
-        //Check Rows
-        for(int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[j].length; j++) {
-                mark = board[i][j];
-                System.out.println("mark is: " + mark + " and mark at " + i + "," + j + " is " + board[i][j]);
-                if(!mark.equals(board[i][j]) || mark.equals(Mark.EMPTY)){
-                    won = false;
-                    break;
-                }
-            }
-            if(won)
-                return true;
-        }
-        
-        won = true;
-        //Check Columns;
-        for(int i = 0; i < board[0].length; i++){
-            mark = board[0][i];
-            for (int j = 0; j < board[0].length; j++) {
-                
-                if(!mark.equals(board[j][i]) || mark.equals(Mark.EMPTY)){
-                    won = false;
-                    break;
-                }
-            }
-            if(won)
-                return true;
-        }
-        
-        
-        // Check the diagonal
-        mark = board[0][0];
-        won = true;
-        for(int i = 0; i < board[0].length; i++){
-            if(!mark.equals(board[i][i]) || mark.equals(Mark.EMPTY)){
-                won = false;
-                break;
-            }
-            
-        }
-        if(won)
-           return true;
-        
-        // Check the other diagonal
-        mark = board[0][0];
-        won = true;
-        for(int i = 0; i < board[0].length; i++){
-            if(!mark.equals(board[i][(board[0].length - 1) - i]) 
-                    || mark.equals(Mark.EMPTY)){
-                won = false;
-                break;
-            }
-            
-        }
-        
-        return won;
-        
+    public Mark[][] getBoard() {
+        return board;
     }
     
 }

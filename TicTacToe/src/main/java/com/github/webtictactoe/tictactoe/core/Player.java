@@ -20,16 +20,14 @@ public class Player extends AbstractEntity {
     
     @Column
     private String password;
-    /*
-    @Column
-    private Game.Mark mark;
-    */
+
     public Player() {
     }
 
     public Player(String name, String password) {
         super(name);
         this.password = password;
+        this.score = 0;
     }
     
     public Integer getScore() {
@@ -39,14 +37,6 @@ public class Player extends AbstractEntity {
     public void setScore(Integer score) {
         this.score = score;
     }
-    /*
-    public Game.Mark getMark(){
-        return mark;
-    }
-    
-    public void setMark(Game.Mark mark){
-        this.mark = mark;
-    }*/
     
     public String getPassword(){
         return password;
@@ -54,7 +44,7 @@ public class Player extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Player{" + "name=" + getName() + "}";
+        return "Player{" + "name=" + getName() + ", password=" + getPassword() + ", score=" + getScore() + "}";
     }
 
 }

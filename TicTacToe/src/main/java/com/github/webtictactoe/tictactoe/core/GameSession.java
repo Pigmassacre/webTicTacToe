@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class GameSession {
     private Player p1;
     private Player p2;
+    private Player winner;
     
     private Player activePlayer;
     
@@ -33,11 +34,18 @@ public class GameSession {
     public boolean move(int x, int y, Player p){
         if(p.equals(activePlayer)){
             if(game.isFree(x, y)){
-                game.move(x, y, markMap.get(p));
+                System.out.println("Active player is: " + activePlayer);
+                Mark winningMark = game.move(x, y, markMap.get(p));
+                
+                if (winningMark.equals(markMap.get(p))) {
+                    winner = p;
+                }
+                
                 if(activePlayer == p1)
                     activePlayer = p2;
                 else
                     activePlayer = p1;
+                System.out.println("And now, active player is: " + activePlayer);
                 return true; // The move was successful.
             }
         }
@@ -48,8 +56,8 @@ public class GameSession {
         return game.getBoard();
     }
     
-    public Boolean gameWon() {
-        return game.gameWon();
+    public Player getWinner() {
+        return winner;
     }
     
     public Player getPlayerOne() {
