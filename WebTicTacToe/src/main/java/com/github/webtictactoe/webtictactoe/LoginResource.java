@@ -34,6 +34,7 @@ public class LoginResource {
                         .ok()
                         .entity(new LoginResponse("Login succeeded!"))
                         .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
+                        .cookie(new NewCookie("password", loginMessage.password, "/", "", "", -1, false)) // Terribly unsafe, we know...
                         .build();
             } else {
                 return Response
@@ -74,6 +75,7 @@ public class LoginResource {
                         .ok()
                         .entity(new LoginResponse("You have been registered!"))
                         .cookie(new NewCookie("name", loginMessage.name, "/", "", "", -1, false))
+                        .cookie(new NewCookie("password", loginMessage.password, "/", "", "", -1, false)) // Terribly unsafe, we know...
                         .build();
             } else {
                 return Response

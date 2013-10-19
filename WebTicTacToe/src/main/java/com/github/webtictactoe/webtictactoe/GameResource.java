@@ -38,6 +38,7 @@ public class GameResource {
             System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
             System.out.println("Given UUID does NOT match a gamesession!");
+            id.destroy();
         }
         
         System.out.println("Anyway, suspending response for " + name);
@@ -98,6 +99,16 @@ public class GameResource {
         
         System.out.println("For game with UUID " + id.getID() + ", got a gameMessage: " + gameMessage);
         
+        if (gameSession == null) {
+            System.out.println("This UUID does not match any gameSession.");
+            return Response.status(400).build();
+        }
+        
+        if (gameSession.getWinner() != null) {
+            System.out.println("A winner has already been decided.");
+            return Response.status(400).build();
+        }
+        
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
             // Take the first matching player.
@@ -112,7 +123,11 @@ public class GameResource {
                 if (gameSession.getWinner() == null) {
                     id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), "Undecided"));
                 } else {
+                    // A player has won, so we broadcast a gameresponse to all active connections and then remove the gamesession and id from the
+                    // gameSessionMap.
+                    System.out.println(gameSession.getWinner().getName() + " has won! Shutting down this gameSession and broadcaster.");
                     id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), gameSession.getWinner().getName()));
+                    gameSessionMap.remove(id.getID());
                 }
                 
                 // The move was successful, so we return an OK response.

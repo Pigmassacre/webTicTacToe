@@ -75,6 +75,7 @@ public class LobbyResource {
                     .ok()
                     .entity(new LogoutResponse("You have been successfully logged out!"))
                     .cookie(new NewCookie("name", "", "/", "", "", 0, false))
+                    .cookie(new NewCookie("password", "", "/", "", "", 0, false))
                     .build();
         } else {
             return Response

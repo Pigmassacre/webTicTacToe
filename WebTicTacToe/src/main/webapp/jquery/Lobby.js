@@ -1,5 +1,6 @@
 /* 
  * @Author emil eriksson
+ * @Author olof karlsson (pigmassacre)
  * Reveal Pattern for Lobby static class
  */
 
@@ -13,8 +14,6 @@ var Lobby = function () {
     var playerListSocket;
     var playerNameRequest;
     var playerNameSocket;
-    var gameRequest;
-    var gameSocket;
     
     function publicRegister (name, password, done, fail) {
         var request = $.ajax({url: baseuri + '/login/register',
@@ -79,46 +78,7 @@ var Lobby = function () {
                     return;
                 }
                 
-                gameRequest = { url: baseuri + '/game/' + json.uuid,
-                    contentType : "application/json",
-                    logLevel : 'debug',
-                    transport : 'long-polling' ,
-                    trackMessageLength : true};
-        
-                gameRequest.onOpen = function (response) {
-                    console.log('connected to game with UUID: ' + json.uuid);
-                };
-
-                gameRequest.onMessage = function (response) {
-                    console.log('got a gameresponse');
-                    
-                    var message = response.responseBody;
-                
-                    try {
-                        var json = $.parseJSON(message);
-                    } catch (e) {
-                        console.log('This doesn\'t look like a valid JSON: ', message);
-                        return;
-                    }
-                    
-                    $('#playerTurn').html(json.activePlayer);
-                    
-                    if (json.winner !== "Undecided") {
-                        if ($.cookie('name') === json.winner) {
-                            console.log('you won!!! :)');
-                        } else {
-                            console.log('you lost! :(');
-                        }
-                    }
-                    
-                    gameController.updateGameBoard(json.gameBoard);
-                };
-                
-                console.log('subscribing to gamerequest');
-                gameSocket = $.atmosphere.subscribe(gameRequest);
-                
-                console.log('showing gameboard of size ' + json.size);
-                lobbyController.showGame(json.size);
+                gameController.startGame(baseuri, json.uuid, json.size);
             };
             
             playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
@@ -172,20 +132,11 @@ var Lobby = function () {
         lobbyController.updatePlayerList(json.names);
     };
     
-    function publicSendGameMove(xPos, yPos) {
-        var request = $.ajax({url: gameRequest.url,
-                type: 'POST',
-                data: $.stringifyJSON({ xPos: xPos, yPos: yPos }),
-                contentType: 'application/json'
-        });
-    };
-    
     return {
         login : publicLogin,
         logout : publicLogout,
         register : publicRegister,
-        findGame : publicFindGame,
-        sendGameMove : publicSendGameMove
+        findGame : publicFindGame
     };
 }();
 

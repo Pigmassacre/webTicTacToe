@@ -93,12 +93,18 @@ var lobbyController = (function () {
  * 
  *  GAME Controller
  *  @author emileriksson
+ *  @author pigmassacre (olof karlsson)
  */
 
 var gameController = (function () {
     return {
         buttonToLobby : function () {
-            //TODO 
+            Game.stopGame();
+            Lobby.login($.cookie('name'), $.cookie('password'), function() {
+                console.log('relogin succeded');
+            }, function() {
+                console.log('relogin failed');
+            });
             $("#pageGame").fadeOut(300, function () {
                 $("#pageLobby").fadeIn(300);
             });
@@ -110,7 +116,7 @@ var gameController = (function () {
                 yPos = evt.clientY - rect.top;
             xPos = parseInt(xPos / (400 / gameCanvas.getBoardSize()), 10);
             yPos = parseInt(yPos / (400 / gameCanvas.getBoardSize()), 10);
-            Lobby.sendGameMove(xPos,yPos);
+            Game.move(xPos,yPos);
             console.log('clicked, sending gamemove');
         },
                 
@@ -123,6 +129,10 @@ var gameController = (function () {
                     gameCanvas.fill(x, y, parseInt(xEntry[y], 10));
                 }
             }
+        },
+                
+        startGame: function(baseuri, uuid, size) {
+            Game.startGame(baseuri, uuid, size);
         }
     };
 })();
