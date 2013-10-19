@@ -16,7 +16,6 @@ import javax.persistence.MappedSuperclass;
 public abstract class AbstractEntity implements Serializable {
 
     @Id
-    @Column(nullable = false)
     private String name;
    
     protected AbstractEntity() {

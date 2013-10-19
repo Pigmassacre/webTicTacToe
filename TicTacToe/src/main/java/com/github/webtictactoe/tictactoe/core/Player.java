@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * @author pigmassacre
  */
 @Entity
-@Table(name="PLAYER")
+@Table
 public class Player extends AbstractEntity {
 
     @Column

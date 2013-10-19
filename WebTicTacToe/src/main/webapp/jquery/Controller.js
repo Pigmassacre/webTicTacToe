@@ -110,14 +110,19 @@ var gameController = (function () {
                 yPos = evt.clientY - rect.top;
             xPos = parseInt(xPos / (400 / gameCanvas.getBoardSize()), 10);
             yPos = parseInt(yPos / (400 / gameCanvas.getBoardSize()), 10);
-            if(Lobby.sendGameMove(xPos,yPos)){
-                
-            }
-            gameCanvas.fill(xPos, yPos, gameCanvas.fillType.cross);
+            Lobby.sendGameMove(xPos,yPos);
+            console.log('clicked, sending gamemove');
         },
                 
-        updateGameBoard: function(gameboard) {
-            
+        updateGameBoard: function(gameBoard) {
+            console.log('updating gameboard');
+            var xEntry;
+            for (var x = 0; x < gameBoard.length; x++) {
+                xEntry = gameBoard[x].item;
+                for (var y = 0; y < xEntry.length; y++) {
+                    gameCanvas.fill(x, y, parseInt(xEntry[y], 10));
+                }
+            }
         }
     };
 })();

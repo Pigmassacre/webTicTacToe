@@ -76,7 +76,7 @@ var gameCanvas = function () {
     function drawGameBoard() {
         for(var iw = 0; iw < total; iw++){
             for(var jw = 0; jw < total; jw++){
-               ctxBg.drawImage(box, (iw*width), (jw*width), width, width);
+                ctxBg.drawImage(box, (iw*width), (jw*width), width, width);
             }
         } 
         for(var iw = 0; iw < total; iw++){

@@ -8,9 +8,8 @@ var Lobby = function () {
     var playerListRequest = { url: baseuri + '/playerlist',
                     contentType : "application/json",
                     logLevel : 'debug',
-                    transport : 'websocket' ,
-                    trackMessageLength : true,
-                    fallbackTransport: 'long-polling'};
+                    transport : 'long-polling' ,
+                    trackMessageLength : true};
     var playerListSocket;
     var playerNameRequest;
     var playerNameSocket;
@@ -63,9 +62,8 @@ var Lobby = function () {
             playerNameRequest = { url: baseuri + '/player/' + $.cookie('name'),
                     contentType : "application/json",
                     logLevel : 'debug',
-                    transport : 'websocket' ,
-                    trackMessageLength : true,
-                    fallbackTransport: 'long-polling'};
+                    transport : 'long-polling' ,
+                    trackMessageLength : true};
                 
             playerNameRequest.onOpen = function (response) {
                 console.log('connected to playernamerequest');
@@ -84,9 +82,8 @@ var Lobby = function () {
                 gameRequest = { url: baseuri + '/game/' + json.uuid,
                     contentType : "application/json",
                     logLevel : 'debug',
-                    transport : 'websocket' ,
-                    trackMessageLength : true,
-                    fallbackTransport: 'long-polling'};
+                    transport : 'long-polling' ,
+                    trackMessageLength : true};
         
                 gameRequest.onOpen = function (response) {
                     console.log('connected to game with UUID: ' + json.uuid);
@@ -104,13 +101,10 @@ var Lobby = function () {
                         return;
                     }
                     
-                    for (var x = 0; x < json.gameBoard.length; x++) {
-                        for (var y = 0; y < json.gameBoard[x].length; y++) {
-                            console.log(json.gameBoard[x][y]);
-                        }
-                    }
+                    console.log('winner is: ' + json.winner);
+                    console.log(json.gameBoard);
                     
-                    //gameController.updateGameBoard(json.gameBoard);
+                    gameController.updateGameBoard(json.gameBoard);
                 };
                 
                 console.log('subscribing to gamerequest');
@@ -122,9 +116,7 @@ var Lobby = function () {
             
             playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
             playerListSocket = $.atmosphere.subscribe(playerListRequest);
-            // This push here is to update the playerlist for all connected players.
-            // Seems to be a bug with atmosphere, so have to set timeout for it... :/
-            setTimeout(playerListSocket.push, 1000);
+            
             done(data);
         });
         
@@ -151,6 +143,7 @@ var Lobby = function () {
     
     playerListRequest.onOpen = function (response) {
         console.log('connected to playerlistrequest');
+        playerListSocket.push();
     };
     
     playerListRequest.onMessage = function (response) {

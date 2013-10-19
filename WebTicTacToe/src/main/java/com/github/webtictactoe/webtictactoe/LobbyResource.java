@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import org.atmosphere.cpr.AtmosphereResource;
 import org.atmosphere.cpr.AtmosphereResourceEvent;
 import org.atmosphere.cpr.AtmosphereResourceEventListenerAdapter;
+import org.atmosphere.cpr.HeaderConfig;
 
 @Path("/")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
@@ -90,16 +91,22 @@ public class LobbyResource {
          */
         @Override
         public void onDisconnect(AtmosphereResourceEvent event) {
-            String nameFromCookie = "";
-            for (Cookie cookie: event.getResource().getRequest().getCookies()) {
-                if (cookie.getName().equals("name")) {
-                    nameFromCookie = cookie.getValue();
+            String transport = event.getResource().getRequest().getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
+            if (transport != null && transport.equalsIgnoreCase(HeaderConfig.DISCONNECT)) {
+                 // Scenario 2: Browser closed the connection.
+                String nameFromCookie = "";
+                for (Cookie cookie: event.getResource().getRequest().getCookies()) {
+                    if (cookie.getName().equals("name")) {
+                        nameFromCookie = cookie.getValue();
+                    }
                 }
-            }
 
-            lobby.logout(nameFromCookie);            
-            event.broadcaster().broadcast(getPlayerlist());
-            System.out.println(nameFromCookie + " was automatically logged out!");
+                lobby.logout(nameFromCookie);            
+                event.broadcaster().broadcast(getPlayerlist());
+                System.out.println(nameFromCookie + " was automatically logged out!");
+            } else {
+                 // Scenario 1: Long-Polling Connection resumed.
+            }
         }
         
     }
