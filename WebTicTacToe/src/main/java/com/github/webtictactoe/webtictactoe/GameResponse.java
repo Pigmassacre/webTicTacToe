@@ -10,32 +10,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class GameResponse {
 
     public String name;
-    // Yes we use an enum in the model, but here a simple X for cross and O for circle will suffice, no?
-    // X as in big x, O as in big o.
-    public Character[][] gameBoard;
-    public Boolean isGameWon;
+    public Integer[][] gameBoard;
+    public String winner;
 
-    public GameResponse(String name, Mark[][] gameBoard, Boolean isGameWon) {
+    public GameResponse(String name, Mark[][] gameBoard, String winner) {
         this.name = name;
-        this.isGameWon = isGameWon;
+        this.winner = winner;
         
         // The gameboard that we are to return in the response.
-        Character[][] responseGameBoard = new Character[gameBoard.length][gameBoard[0].length];
+        Integer[][] responseGameBoard = new Integer[gameBoard.length][gameBoard[0].length];
 
-        // We loop through the gameboard and converts all Mark enums to string representations.
-        // Could possibly do this in a smarter way...
+        // We convert the gameboard from Marks to Integers.
         for (int x = 0; x < gameBoard.length; x++) {
             for (int y = 0; y < gameBoard[x].length; y++) {
                 System.out.println("gameboard[" + x + "][" + y + "] is: " + gameBoard[x][y]);
                 switch (gameBoard[x][y]) {
                     case EMPTY:
-                        responseGameBoard[x][y] = '\0'; // the null character
+                        responseGameBoard[x][y] = 0; // As expected by GameCanvas.js
                         break;
                     case CIRCLE:
-                        responseGameBoard[x][y] = 'O'; // a big o (not a 0 or anything silly like that!)
+                        responseGameBoard[x][y] = 1; // As expected by GameCanvas.js
                         break;
                     case CROSS:
-                        responseGameBoard[x][y] = 'X'; // a big x
+                        responseGameBoard[x][y] = -1; // As expected by GameCanvas.js
                         break;
                 }
             }

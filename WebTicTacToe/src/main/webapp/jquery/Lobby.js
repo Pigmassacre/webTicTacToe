@@ -32,7 +32,7 @@ var Lobby = function () {
         request.fail(function(jqXHR, textStatus) {
            fail(jqXHR, textStatus);
         });
-    }
+    };
     
     function publicLogout (done, fail) {
         var request = $.ajax({url: baseuri + '/logout',
@@ -49,7 +49,7 @@ var Lobby = function () {
         request.fail(function(jqXHR, textStatus) {
            fail(jqXHR, textStatus);
         });
-    }
+    };
     
     function publicLogin(name, password, done, fail){
         var request = $.ajax({url: baseuri + '/login',
@@ -93,7 +93,7 @@ var Lobby = function () {
                 };
 
                 gameRequest.onMessage = function (response) {
-                    console.log('got a gameresponse: ' + response);
+                    console.log('got a gameresponse');
                     
                     var message = response.responseBody;
                 
@@ -104,14 +104,19 @@ var Lobby = function () {
                         return;
                     }
                     
-                    console.log(json.gameboard);
+                    for (var x = 0; x < json.gameBoard.length; x++) {
+                        for (var y = 0; y < json.gameBoard[x].length; y++) {
+                            console.log(json.gameBoard[x][y]);
+                        }
+                    }
                     
-                    //gameController.updateGameBoard(gameboard);
+                    //gameController.updateGameBoard(json.gameBoard);
                 };
                 
                 console.log('subscribing to gamerequest');
                 gameSocket = $.atmosphere.subscribe(gameRequest);
                 
+                console.log('showing gameboard of size ' + json.size);
                 lobbyController.showGame(json.size);
             };
             
@@ -120,18 +125,15 @@ var Lobby = function () {
             // This push here is to update the playerlist for all connected players.
             // Seems to be a bug with atmosphere, so have to set timeout for it... :/
             setTimeout(playerListSocket.push, 1000);
-            //playerListSocket.push();
             done(data);
         });
         
         request.fail(function(jqXHR, textStatus) {
            fail(jqXHR, textStatus);
         });
-    }
+    };
     
     function publicFindGame(size, done, fail){
-        var gameSession;
-        
         var request = $.ajax({url: baseuri + '/game/findgame/' + size,
                 type: 'POST'
         });
@@ -145,10 +147,7 @@ var Lobby = function () {
             console.log('failed to find game');
             fail(jqXHR, textStatus);
         });
-        
-        //Called when game is found
-        done(gameSession);
-    }
+    };
     
     playerListRequest.onOpen = function (response) {
         console.log('connected to playerlistrequest');
@@ -169,14 +168,26 @@ var Lobby = function () {
             json.names = [json.names];
         }
         
-        console.log('in playerlistrequest');
-        
+        console.log('updating playerlist: ' + json.names);
         lobbyController.updatePlayerList(json.names);
     };
     
     function publicSendGameMove(xPos, yPos) {
-        gameSocket.push($.stringifyJSON({ xPos: xPos, yPos: yPos }));
-    }
+        //gameSocket.push($.stringifyJSON({ xPos: xPos, yPos: yPos }));
+        var request = $.ajax({url: gameRequest.url,
+                type: 'POST',
+                data: $.stringifyJSON({ xPos: xPos, yPos: yPos }),
+                contentType: 'application/json'
+        });
+        
+        request.done(function(data) {
+            console.log('game move was accepted');
+        });
+        
+        request.fail(function(jqXHR, textStatus) {
+           console.log('game move was not accepted');
+        });
+    };
     
     return {
         login : publicLogin,

@@ -1,6 +1,5 @@
 package com.github.webtictactoe.webtictactoe;
 
-import com.github.webtictactoe.tictactoe.core.Game.Mark;
 import com.github.webtictactoe.tictactoe.core.GameSession;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
@@ -8,7 +7,6 @@ import java.util.HashMap;
 import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
-import org.atmosphere.annotation.Broadcast;
 import org.atmosphere.annotation.Suspend;
 import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
@@ -72,7 +70,6 @@ public class GameResource {
             
             // Find a game.
             GameSession gameSession = lobby.findGame(givenPlayer, size);
-            System.out.println("mark of " + givenPlayer.getName() + ": " + gameSession.getMarkForPlayer(givenPlayer));
             if (gameSession != null) {
                 // Generate a new UUID.
                 UUID uuid = UUID.randomUUID();
@@ -93,34 +90,40 @@ public class GameResource {
     }
     
     @POST
-    @Broadcast(writeEntity = false)
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/{id}")
-    public Broadcastable broadcastGamestate(@PathParam(value = "id") Broadcaster id, GameMessage gameMessage) {
+    public Response broadcastGamestate(@PathParam(value = "id") Broadcaster id, GameMessage gameMessage) {
         GameSession gameSession = gameSessionMap.get(id.getID());
         
-        System.out.println("Got a gameMessage: " + gameMessage);
+        System.out.println("For game with UUID " + id.getID() + ", got a gameMessage: " + gameMessage);
         
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
             // Take the first matching player.
             Player givenPlayer = player;
-            System.out.println("mark of " + givenPlayer.getName() + ": " + gameSession.getMarkForPlayer(givenPlayer));
+            System.out.println("Mark of " + givenPlayer.getName() + " is: " + gameSession.getMarkForPlayer(givenPlayer));
             // Try to make a move to the given position with the given player.
             Boolean successfulMove = gameSession.move(gameMessage.xPos, gameMessage.yPos, givenPlayer);
             
             // If the move is successful, we convert the new gameboard to a response-friendly format.
             if (successfulMove) {
-                // The move was successful, so we return an OK response together with the state of the board, and the name
-                // of the player who played last. We also return true if the game was won, or false if it was not.
-                // If the game was won, the given name will match to the winning player.
-                return new Broadcastable(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.gameWon()), "", id);
+                // Broadcast the name of the last playing player, the state of the board and, if available, the name of the winner.
+                if (gameSession.getWinner() == null) {
+                    id.broadcast(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), "Undecided"));
+                } else {
+                    id.broadcast(new GameResponse(givenPlayer.getName(), gameSession.getBoard(), gameSession.getWinner().getName()));
+                }
+                
+                // The move was successful, so we return an OK response.
+                System.out.println("Game move was accepted, returning statuscode 200.");
+                return Response.ok().build();
             }
         }
         
         // Move wasn't successful or player wasn't found.
-        return new Broadcastable("Something went wrong.", "", id); // TODO: Add a GameErrorResponse perhaps?
+        System.out.println("Game move was not accepted, returning statuscode 400.");
+        return Response.status(400).build();
     }
     
 }
