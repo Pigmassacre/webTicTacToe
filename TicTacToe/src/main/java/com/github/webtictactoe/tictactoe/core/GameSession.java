@@ -34,7 +34,6 @@ public class GameSession {
     public boolean move(int x, int y, Player p){
         if(p.equals(activePlayer)){
             if(game.isFree(x, y)){
-                System.out.println("Active player is: " + activePlayer);
                 Mark winningMark = game.move(x, y, markMap.get(p));
                 
                 if (winningMark.equals(markMap.get(p))) {
@@ -45,7 +44,6 @@ public class GameSession {
                     activePlayer = p2;
                 else
                     activePlayer = p1;
-                System.out.println("And now, active player is: " + activePlayer);
                 return true; // The move was successful.
             }
         }
