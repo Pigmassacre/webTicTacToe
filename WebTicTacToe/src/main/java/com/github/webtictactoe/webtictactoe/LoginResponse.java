@@ -2,6 +2,10 @@ package com.github.webtictactoe.webtictactoe;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The message the server sends to a client that tries to log in.
+ * @author pigmassacre
+ */
 @XmlRootElement
 public class LoginResponse {
 

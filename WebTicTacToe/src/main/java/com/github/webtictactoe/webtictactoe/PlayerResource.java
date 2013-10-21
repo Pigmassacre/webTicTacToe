@@ -1,6 +1,5 @@
 package com.github.webtictactoe.webtictactoe;
 
-import com.github.webtictactoe.tictactoe.core.Game.Mark;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
 import org.atmosphere.annotation.Suspend;
@@ -8,7 +7,6 @@ import org.atmosphere.config.service.AtmosphereService;
 import org.atmosphere.jersey.JerseyBroadcaster;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,6 +14,13 @@ import javax.ws.rs.core.Response;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.jersey.Broadcastable;
 
+/**
+ * This is the resource where players receive their notifications that
+ * a game has been found for them. Players subscribe to this resource
+ * and then GameResource.findGame() broadcasts to this resource when
+ * a game has been found.
+ * @author pigmassacre
+ */
 @Path("/player")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class PlayerResource {
@@ -30,13 +35,17 @@ public class PlayerResource {
         return new Broadcastable("", name);
     }
     
+    /**
+     * A simple REST-method to receive the current score of the player.
+     * @param name
+     * @return 
+     */
     @GET
     @Produces("application/json")
     @Path("/{name}/info")
     public Response getPlayerInformation(@PathParam(value = "name") String name) {
         for (Player player: lobby.getPlayerRegistry().getByName(name)) {
             Integer score = player.getScore();
-            //Mark mark = player.();
             return Response
                     .ok()
                     .entity(new PlayerResponse(name, score))

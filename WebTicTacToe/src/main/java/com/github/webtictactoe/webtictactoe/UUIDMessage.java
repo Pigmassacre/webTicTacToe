@@ -2,6 +2,11 @@ package com.github.webtictactoe.webtictactoe;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * This is the message that the server broadcasts to the players that have been
+ * matched together to play a game of tictactoe.
+ * @author pigmassacre
+ */
 @XmlRootElement
 public class UUIDMessage {
 

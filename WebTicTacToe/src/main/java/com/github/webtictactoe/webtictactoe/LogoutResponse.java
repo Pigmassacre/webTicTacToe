@@ -2,6 +2,10 @@ package com.github.webtictactoe.webtictactoe;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * This is the response the server sends to a client that tries to log out.
+ * @author pigmassacre
+ */
 @XmlRootElement
 public class LogoutResponse {
 

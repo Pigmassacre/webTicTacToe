@@ -8,6 +8,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+/**
+ * This is the resource that takes care of logging in and registering players.
+ * @author pigmassacre
+ */
 @Path("/login/")
 public class LoginResource {
     

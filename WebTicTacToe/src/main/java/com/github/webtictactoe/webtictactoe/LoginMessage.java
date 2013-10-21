@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LoginMessage {
 
     public String name;
-    public String password;
+    public String password; // stupid stupid stupid... :/
 
     public LoginMessage(String name, String password) {
         this.name = name;
