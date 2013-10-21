@@ -9,10 +9,12 @@
 var loginController  = (function () {
     return {
         login : function () {
+            console.log('logging in');
             var username = $("#textUsername").val();
             var password = $("#textPassword").val();
             Lobby.login(username, password, 
             function(data) {
+                console.log('login successful');
                 $("#pageLogin").fadeOut(500, function () {
                     $("#pageLobby").fadeIn(500);
                 });
@@ -26,15 +28,18 @@ var loginController  = (function () {
             $('#textUsername').val('');
             $('#textPassword').val('');
         },
-        register : function () {
+        register : function (event) {
+            console.log('in loginController.register');
             var username = $("#textUsername").val();
             var password = $("#textPassword").val();
             Lobby.register(username, password, function(data) {
+                console.log('register successful, logging in');
                 loginController.login();
             },
             function(jqXHR, textStatus) {
                 console.log($.parseJSON(jqXHR.responseText).message);
             });
+            event.stopImmediatePropagation(); // This is to stop register being called multiple times for some reason.
         }
     };
 })();
@@ -50,7 +55,7 @@ var lobbyController = (function () {
         findGame : function () {
             var size = $('#sizeVal').val();
             Lobby.findGame(size, function () {
-                /* Initializing Game Canvas  */
+                console.log('found game succeded in controller');
             }, function() {
                 console.log('failed in controller');
             });
@@ -100,7 +105,10 @@ var gameController = (function () {
     return {
         buttonToLobby : function () {
             Game.stopGame();
+            // Since the server logs us out when connecting us to a game, we have to log back in again when returning to lobby.
+            // Yes, server could possibly be designed better but we had to make do with the time we've got. :/
             Lobby.login($.cookie('name'), $.cookie('password'), function() {
+                Lobby.forcePlayerListPush(); // This is to correctly update the playerlist once logged in again!
                 console.log('relogin succeded');
             }, function() {
                 console.log('relogin failed');

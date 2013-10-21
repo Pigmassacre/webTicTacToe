@@ -67,10 +67,19 @@ var Game = function () {
     }
     
     function publicMove(xPos, yPos){
-        $.ajax({url: gameRequest.url,
+        console.log('sending gamemove to: ' + gameRequest.url);
+        var deferred = $.ajax({url: gameRequest.url,
                 type: 'POST',
                 data: $.stringifyJSON({ xPos: xPos, yPos: yPos }),
-                contentType: 'application/json'
+                contentType: 'application/json',
+                async: false
+        });
+        deferred.fail(function (jqXHR, textStatus, errorThrown) {
+            console.log('failed for some reason');
+            console.log(textStatus);
+        });
+        deferred.always(function () {
+            console.log('finished with gamemove post'); 
         });
     }
     

@@ -36,7 +36,7 @@ public class LobbyResource {
     @Suspend(contentType = "application/json", listeners = {OnDisconnect.class})
     @Path("/playerlist")
     public String suspend() {
-        System.out.println("Suspending connection for " + name);
+        System.out.println("Suspending playerlist connection for " + name);
         return "";
     }
     
@@ -71,6 +71,7 @@ public class LobbyResource {
         System.out.println("Logout() called by " + name);
         
         if (success) {
+            System.out.println("Logout succeded for " + name);
             return Response
                     .ok()
                     .entity(new LogoutResponse("You have been successfully logged out!"))
@@ -78,6 +79,7 @@ public class LobbyResource {
                     .cookie(new NewCookie("password", "", "/", "", "", 0, false))
                     .build();
         } else {
+            System.out.println("Logout failed for " + name);
             return Response
                     .status(400)
                     .entity(new LogoutResponse("Logout failed, try again!"))
@@ -93,21 +95,22 @@ public class LobbyResource {
         @Override
         public void onDisconnect(AtmosphereResourceEvent event) {
             String transport = event.getResource().getRequest().getHeader(HeaderConfig.X_ATMOSPHERE_TRANSPORT);
-            if (transport != null && transport.equalsIgnoreCase(HeaderConfig.DISCONNECT)) {
-                 // Scenario 2: Browser closed the connection.
-                String nameFromCookie = "";
-                for (Cookie cookie: event.getResource().getRequest().getCookies()) {
-                    if (cookie.getName().equals("name")) {
-                        nameFromCookie = cookie.getValue();
-                    }
+            /*if (transport != null && transport.equalsIgnoreCase(HeaderConfig.DISCONNECT)) {*/
+            // Scenario 2: Browser closed the connection.
+            String nameFromCookie = "";
+            for (Cookie cookie: event.getResource().getRequest().getCookies()) {
+                if (cookie.getName().equals("name")) {
+                    nameFromCookie = cookie.getValue();
                 }
-
-                lobby.logout(nameFromCookie);            
-                event.broadcaster().broadcast(getPlayerlist());
-                System.out.println(nameFromCookie + " was automatically logged out!");
-            } else {
-                 // Scenario 1: Long-Polling Connection resumed.
             }
+
+            lobby.logout(nameFromCookie);            
+            event.broadcaster().broadcast(getPlayerlist());
+            System.out.println(nameFromCookie + " was automatically logged out!");
+            /*} else {
+                 // Scenario 1: Long-Polling Connection resumed.
+                System.out.println("Long-polling connection resumed.");
+            }*/
         }
         
     }

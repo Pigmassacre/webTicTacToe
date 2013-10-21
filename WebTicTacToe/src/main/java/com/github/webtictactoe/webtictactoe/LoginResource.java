@@ -30,6 +30,7 @@ public class LoginResource {
             // As long as the name and password aren't empty, we try to login.
             Boolean success = lobby.login(loginMessage.name, loginMessage.password);
             if(success) {
+                System.out.println("Login succeded for " + loginMessage.name);
                 return Response
                         .ok()
                         .entity(new LoginResponse("Login succeeded!"))
@@ -37,6 +38,7 @@ public class LoginResource {
                         .cookie(new NewCookie("password", loginMessage.password, "/", "", "", -1, false)) // Terribly unsafe, we know...
                         .build();
             } else {
+                System.out.println("Login failed for " + loginMessage.name + " because the password didnt match.");
                 return Response
                         .status(400)
                         .entity(new LoginResponse("That password doesn't match that username, try again!"))
@@ -44,6 +46,7 @@ public class LoginResource {
             }
         } else {
             // If the name and / or password is empty, the user is denied to login.
+            System.out.println("Login failed for " + loginMessage.name + " because name and / or password was empty.");
             return Response
                     .status(400)
                     .entity(new LoginResponse("Name and / or password cannot be empty!"))
@@ -70,6 +73,7 @@ public class LoginResource {
             Boolean success = lobby.register(loginMessage.name, loginMessage.password);
 
             if (success) {
+                System.out.println("Registration succeded for " + loginMessage.name);
                 lobby.login(loginMessage.name, loginMessage.password);
                 return Response
                         .ok()
@@ -78,6 +82,7 @@ public class LoginResource {
                         .cookie(new NewCookie("password", loginMessage.password, "/", "", "", -1, false)) // Terribly unsafe, we know...
                         .build();
             } else {
+                System.out.println("Registration failed for " + loginMessage.name + " because username is taken.");
                 return Response
                         .status(400)
                         .entity(new LoginResponse("That username is already taken."))
@@ -85,6 +90,7 @@ public class LoginResource {
             }
         } else {
             // If the name and / or password is empty, the user is denied registration.
+            System.out.println("Registration failed for " + loginMessage.name + " because the given name or password was empty.");
             return Response
                     .status(400)
                     .entity(new LoginResponse("Name and / or password cannot be empty!"))

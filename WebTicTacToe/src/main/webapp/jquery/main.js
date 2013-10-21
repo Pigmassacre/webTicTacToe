@@ -13,7 +13,7 @@ $(function () {
      */
     $('#buttonLogin').click(loginController.login);
     
-    $('#buttonRegister').click(loginController.register);
+    $('#buttonRegister').unbind('click').click(loginController.register);
     
     $('#buttonReset').click(loginController.reset);
     

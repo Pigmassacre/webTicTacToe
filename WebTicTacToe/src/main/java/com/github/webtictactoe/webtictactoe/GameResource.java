@@ -38,7 +38,7 @@ public class GameResource {
             System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
             System.out.println("Given UUID does NOT match a gamesession!");
-            id.destroy();
+            //id.destroy();
         }
         
         System.out.println("Anyway, suspending response for " + name);
@@ -77,16 +77,20 @@ public class GameResource {
 
                 // Map the new gamesession to the new uuid.
                 gameSessionMap.put(uuid.toString(), gameSession);
+                
+                System.out.println("Found game for " + gameSession.getPlayerOne() + " and " + gameSession.getPlayerTwo());
 
                 // Broadcast the UUID to the suspended requests that match both players names.
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
                 
                 // Simply return an OK response, the UUID is broadcast to both relevant players above.
+                System.out.println("Game found, returning statuscode 200.");
                 return Response.ok().build();
             }
         }
         // Player matching that name not found, something terribly wrong has occured!
+        System.out.println("Game not found, returning statuscode 400.");
         return Response.status(400).build();
     }
     
