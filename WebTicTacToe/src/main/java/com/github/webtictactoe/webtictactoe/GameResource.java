@@ -21,15 +21,28 @@ import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.jersey.Broadcastable;
 
+/**
+ * This is the resource that takes care of actually finding and playing a game of tictactoe.
+ * @author pigmassacre
+ */
 @Path("/game")
 @AtmosphereService(broadcaster = JerseyBroadcaster.class)
 public class GameResource {
     
     private static ILobby lobby = Lobby.INSTANCE.getLobby();
+    
+    // We use this to map UUID's to gameSessions, so we know what gameSession to handle depending on the UUID given
+    // in a request.
     private static HashMap<String, GameSession> gameSessionMap = new HashMap<String, GameSession>();
+    
     // We know the name of the player of the request by the use of cookies!
     private @CookieParam(value = "name") String name;
     
+    /**
+     * Suspends a client to the broadcaster with id 'id'.
+     * @param id
+     * @return 
+     */
     @GET
     @Suspend(contentType = "application/json")
     @Path("/{id}")
@@ -38,7 +51,6 @@ public class GameResource {
             System.out.println("Given UUID matches a gamesession, request is OK");
         } else {
             System.out.println("Given UUID does NOT match a gamesession!");
-            id.destroy();
         }
         
         System.out.println("Anyway, suspending response for " + name);
@@ -77,19 +89,37 @@ public class GameResource {
 
                 // Map the new gamesession to the new uuid.
                 gameSessionMap.put(uuid.toString(), gameSession);
+                
+                System.out.println("Found game for " + gameSession.getPlayerOne() + " and " + gameSession.getPlayerTwo());
 
                 // Broadcast the UUID to the suspended requests that match both players names.
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
                 BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
                 
                 // Simply return an OK response, the UUID is broadcast to both relevant players above.
+                System.out.println("Game found, returning statuscode 200.");
                 return Response.ok().build();
             }
         }
         // Player matching that name not found, something terribly wrong has occured!
+        System.out.println("Game not found, returning statuscode 400.");
         return Response.status(400).build();
     }
     
+    /**
+     * This is where player movements are taken into consideration. 
+     * Broadcasts the state of the game to all clients suspended to the Broadcaster id.
+     * 
+     * Returns http status code 200 if the request is OK (i.e. the playername matches
+     * the player whos turn it is, and the x and y-pos match an empty state of the board).
+     * 
+     * Else returns http status code 400.
+     * 
+     * @param id the Broadcaster to be used to broadcast the state of the game
+     * @param gameMessage a JSON object marshaled into a GameMessage object that contains
+     * the data with which to make a move with
+     * @return a Response object
+     */
     @POST
     @Consumes("application/json")
     @Produces("application/json")

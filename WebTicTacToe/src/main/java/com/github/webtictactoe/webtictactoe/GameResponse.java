@@ -6,6 +6,12 @@ import static com.github.webtictactoe.tictactoe.core.Game.Mark.CROSS;
 import static com.github.webtictactoe.tictactoe.core.Game.Mark.EMPTY;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * This is the response the server broadcasts to all clients connected to the matching UUID.
+ * It contains the next active player, the state of the gameboard and the name of the winner, if
+ * there is any.
+ * @author pigmassacre
+ */
 @XmlRootElement
 public class GameResponse {
 

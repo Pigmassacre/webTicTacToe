@@ -3,11 +3,6 @@ package com.github.webtictactoe.webtictactoe;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.LobbyFactory;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * We use this to access the lobby in the web app. This keeps the 
  * lobby a singleton.
