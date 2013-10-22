@@ -94,8 +94,12 @@ public class GameResource {
                 System.out.println("Found game for " + gameSession.getPlayerOne() + " and " + gameSession.getPlayerTwo());
 
                 // Broadcast the UUID to the suspended requests that match both players names.
-                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerOne().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
-                BroadcasterFactory.getDefault().lookup(gameSession.getPlayerTwo().getName()).broadcast(new UUIDMessage(uuid.toString(), size));
+                BroadcasterFactory.getDefault()
+                        .lookup(gameSession.getPlayerOne().getName())
+                        .broadcast(new UUIDMessage(uuid.toString(), size, gameSession.getActivePlayer().getName()));
+                BroadcasterFactory.getDefault()
+                        .lookup(gameSession.getPlayerTwo().getName())
+                        .broadcast(new UUIDMessage(uuid.toString(), size, gameSession.getActivePlayer().getName()));
                 
                 // Simply return an OK response, the UUID is broadcast to both relevant players above.
                 System.out.println("Game found, returning statuscode 200.");

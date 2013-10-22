@@ -12,10 +12,12 @@ public class UUIDMessage {
 
     public String uuid;
     public Integer size;
+    public String startingPlayerName;
 
-    public UUIDMessage(String uuid, Integer size) {
+    public UUIDMessage(String uuid, Integer size, String startingPlayerName) {
         this.uuid = uuid;
         this.size = size;
+        this.startingPlayerName = startingPlayerName;
     }
 
     public UUIDMessage() {

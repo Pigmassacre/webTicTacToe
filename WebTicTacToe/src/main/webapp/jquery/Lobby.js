@@ -81,7 +81,7 @@ var Lobby = function () {
                         return;
                     }
 
-                    gameController.startGame(baseuri, json.uuid, json.size);
+                    gameController.startGame(baseuri, json.uuid, json.size, json.startingPlayerName);
                 };
                 
                 // Finally we subscribe to the request.

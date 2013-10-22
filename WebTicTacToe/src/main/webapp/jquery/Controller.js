@@ -145,7 +145,8 @@ var gameController = (function () {
             $('#playerTurn').html(text);
         },
                 
-        startGame: function(baseuri, uuid, size) {
+        startGame: function(baseuri, uuid, size, startingPlayerName) {
+            $('#playerTurn').html(startingPlayerName);
             Game.startGame(baseuri, uuid, size);
         }
     };
