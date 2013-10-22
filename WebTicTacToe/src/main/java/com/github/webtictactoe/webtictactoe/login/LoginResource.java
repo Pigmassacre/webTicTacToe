@@ -31,7 +31,8 @@ public class LoginResource {
     public Response login(LoginMessage loginMessage) {
         System.out.println("login() called with data: " + loginMessage.name + " / " + loginMessage.password);
         
-        if (!loginMessage.name.isEmpty() && !loginMessage.password.isEmpty()) {
+        if (!loginMessage.name.isEmpty() && !loginMessage.name.equals("null") 
+                && !loginMessage.password.isEmpty() && !loginMessage.password.equals("null")) {
             // As long as the name and password aren't empty, we try to login.
             Boolean success = lobby.login(loginMessage.name, loginMessage.password);
             if(success) {

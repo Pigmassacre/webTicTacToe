@@ -64,6 +64,7 @@ var Game = function () {
     
     function publicStopGame() {
         if (typeof(gameSocket.unsubscribe) === 'function') {
+            console.log('unsubscribing from gamesocket');
             gameSocket.unsubscribe();
         }
     }

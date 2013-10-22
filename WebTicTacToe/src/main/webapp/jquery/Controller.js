@@ -15,6 +15,7 @@ var loginController  = (function () {
             Lobby.login(username, password, 
             function(data) {
                 console.log('login successful');
+                loginController.reset();
                 $("#pageLogin").fadeOut(500, function () {
                     $("#pageLobby").fadeIn(500);
                 });
@@ -39,6 +40,7 @@ var loginController  = (function () {
                 loginController.login();
             },
             function(jqXHR, textStatus) {
+                $("#loginStatus").html("Register Failed: " + $.parseJSON(jqXHR.responseText).message);
                 console.log($.parseJSON(jqXHR.responseText).message);
             });
             event.stopImmediatePropagation(); // This is to stop register being called multiple times for some reason.
@@ -64,7 +66,7 @@ var lobbyController = (function () {
         },
         logout : function () {
             Lobby.logout(function(data) {
-               $("#pageLobby").fadeOut(300, function () {
+                $("#pageLobby").fadeOut(300, function () {
                     $("#pageLogin").fadeIn(300);
                 });
             }, function(jqXHR, textStatus) {

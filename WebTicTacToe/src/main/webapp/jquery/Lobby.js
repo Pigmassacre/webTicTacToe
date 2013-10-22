@@ -40,7 +40,6 @@ var Lobby = function () {
         
         request.done(function(data) {
             playerListSocket.push();
-            $.atmosphere.unsubscribe(playerListRequest);
             done(data);
         });
         
@@ -59,7 +58,7 @@ var Lobby = function () {
         });
         
         request.done(function(data) {
-            if (typeof(playerNameRequest) === 'undefined') {
+            if (typeof(playerNameRequest) === 'undefined' || playerNameRequest === null) {
                 // First we create a connection to the atmosphere channel matching our player name.
                 playerNameRequest = { url: baseuri + '/player/' + $.cookie('name'),
                         contentType : "application/json",
@@ -88,7 +87,7 @@ var Lobby = function () {
                 playerNameSocket = $.atmosphere.subscribe(playerNameRequest);
             }
             
-            if (typeof(playerListRequest) === 'undefined') {
+            if (typeof(playerListRequest) === 'undefined' || playerListRequest === null) {
                 // THEN we create a connection to the atmosphere channel regarding the playerlist.
                 playerListRequest = { url: baseuri + '/playerlist',
                         contentType : "application/json",
@@ -110,14 +109,22 @@ var Lobby = function () {
                         return;
                     }
 
-                    // If there is only one player in the playerlist, we do this so we can 
-                    // loop through json.names safely.
-                    if (typeof json.names === 'string') {
-                        json.names = [json.names];
-                    }
 
-                    console.log('updating playerlist: ' + json.names);
-                    lobbyController.updatePlayerList(json.names);
+                    // more opera hacks... fails for "cannot convert json to object", so we try catch here...
+                    try {
+                        // If there is only one player in the playerlist, we do this so we can 
+                        // loop through json.names safely.
+                        if (typeof(json) !== 'undefined' || json !== null) {
+                                if (typeof json.names === 'string') {
+                                    json.names = [json.names];
+                                }
+                        }
+
+                        console.log('updating playerlist: ' + json.names);
+                        lobbyController.updatePlayerList(json.names);
+                    } catch (error){
+                        console.log('gently screw you opera: ' + error);
+                    }
                 };
 
                 playerListRequest.onClose = function (response) {
@@ -126,6 +133,8 @@ var Lobby = function () {
                 
                 // And we subscribe to the request.
                 playerListSocket = $.atmosphere.subscribe(playerListRequest);
+            } else {
+                playerListSocket.push(); // opera hack for updating playerlist correctly after one logout and one login again
             }
             
             done(data);
