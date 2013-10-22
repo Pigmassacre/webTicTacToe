@@ -1,5 +1,6 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.game;
 
+import com.github.webtictactoe.webtictactoe.lobby.Lobby;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
 import org.atmosphere.annotation.Suspend;

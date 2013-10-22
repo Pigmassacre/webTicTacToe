@@ -1,7 +1,8 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.lobby;
 
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
+import com.github.webtictactoe.webtictactoe.game.Playerlist;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.ws.rs.CookieParam;

@@ -1,8 +1,9 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.game;
 
 import com.github.webtictactoe.tictactoe.core.GameSession;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import com.github.webtictactoe.tictactoe.core.Player;
+import com.github.webtictactoe.webtictactoe.lobby.Lobby;
 import java.util.HashMap;
 import java.util.UUID;
 import javax.ws.rs.Consumes;

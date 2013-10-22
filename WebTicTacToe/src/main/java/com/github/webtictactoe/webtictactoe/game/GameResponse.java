@@ -1,4 +1,4 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.game;
 
 import com.github.webtictactoe.tictactoe.core.Game.Mark;
 import static com.github.webtictactoe.tictactoe.core.Game.Mark.CIRCLE;

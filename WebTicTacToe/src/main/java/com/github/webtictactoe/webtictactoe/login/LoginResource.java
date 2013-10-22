@@ -1,5 +1,6 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.login;
 
+import com.github.webtictactoe.webtictactoe.lobby.Lobby;
 import com.github.webtictactoe.tictactoe.core.ILobby;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

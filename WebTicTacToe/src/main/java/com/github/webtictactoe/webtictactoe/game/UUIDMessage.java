@@ -1,4 +1,4 @@
-package com.github.webtictactoe.webtictactoe;
+package com.github.webtictactoe.webtictactoe.game;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
