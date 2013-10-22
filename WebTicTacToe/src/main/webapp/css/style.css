@@ -114,3 +114,8 @@ div.player{
 div#playerListBox{
     height: 180px;
 }
+
+#loginStatus{
+    color: red;
+    font-size: 9px;
+}

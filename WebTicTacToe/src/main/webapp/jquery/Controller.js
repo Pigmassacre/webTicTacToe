@@ -141,6 +141,10 @@ var gameController = (function () {
             }
         },
                 
+        gameEnded: function(text) {
+            $('#playerTurn').html(text);
+        },
+                
         startGame: function(baseuri, uuid, size) {
             Game.startGame(baseuri, uuid, size);
         }
