@@ -21,10 +21,12 @@ var loginController  = (function () {
                 lobbyController.showPlayer(data);
             }, 
             function(jqXHR, textStatus) {
+                $("#loginStatus").html("Login Failed: " + $.parseJSON(jqXHR.responseText).message);
                 console.log($.parseJSON(jqXHR.responseText).message);
             });
         },
         reset : function () {
+            $("#loginStatus").html('');
             $('#textUsername').val('');
             $('#textPassword').val('');
         },
@@ -137,6 +139,10 @@ var gameController = (function () {
                     gameCanvas.fill(x, y, parseInt(xEntry[y], 10));
                 }
             }
+        },
+                
+        gameEnded: function(text) {
+            $('#playerTurn').html(text);
         },
                 
         startGame: function(baseuri, uuid, size) {

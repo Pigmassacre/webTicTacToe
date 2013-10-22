@@ -38,8 +38,10 @@ var Game = function () {
 
             if (json.winner !== "Undecided") {
                 if ($.cookie('name') === json.winner) {
+                    gameController.gameEnded('you won!!! :)');
                     console.log('you won!!! :)');
                 } else {
+                    gameController.gameEnded('you lost! :(');
                     console.log('you lost! :(');
                 }
             }
