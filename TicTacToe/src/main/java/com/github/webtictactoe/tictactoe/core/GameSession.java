@@ -38,6 +38,14 @@ public class GameSession {
                 
                 if (winningMark.equals(markMap.get(p))) {
                     winner = p;
+                    
+                    // A dumb version of ELO rating... :P
+                    p.setScore(p.getScore() + 15);
+                    if (!p.equals(getPlayerOne())) {
+                        getPlayerOne().setScore(getPlayerOne().getScore() - 15);
+                    } else {
+                        getPlayerTwo().setScore(getPlayerTwo().getScore() - 15);
+                    }
                 }
                 
                 if(activePlayer == p1)

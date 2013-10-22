@@ -27,7 +27,7 @@ public class Player extends AbstractEntity {
     public Player(String name, String password) {
         super(name);
         this.password = password;
-        this.score = 0;
+        this.score = 1500;
     }
     
     public Integer getScore() {
