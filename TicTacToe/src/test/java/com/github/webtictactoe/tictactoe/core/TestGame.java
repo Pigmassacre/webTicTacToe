@@ -2,7 +2,6 @@ package com.github.webtictactoe.tictactoe.core;
 
 /*
  * @author antonwestberg
- * @author pigmassacre
  */
 
 import com.github.webtictactoe.tictactoe.core.Game.Mark;
