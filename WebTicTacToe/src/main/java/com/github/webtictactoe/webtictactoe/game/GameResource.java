@@ -23,7 +23,20 @@ import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.jersey.Broadcastable;
 
 /**
- * This is the resource that takes care of actually finding and playing a game of tictactoe.
+ * This is the resource class that takes care of all things GameSession related.
+ * It maps UUID's to GameSession objects, and allows the client-side to basically
+ * play the game.
+ * 
+ * The idea is basically that every client subscribe to an Atmosphere "Resource"
+ * with the id "/player/{name}", where {name} is the name of that Player. The findGame
+ * method when called will then (if the findGame request is successful I.E. there were enough players
+ * online to create a new GameSession) broadcast an UUIDResponse to the Atmosphere Resources 
+ * that match each players names ("/player/playeronename" etc).
+ * 
+ * Now, when each client has the same UUID, they can use that UUID to call the makeGameMove method
+ * which takes care of calling .move() on the matching GameSession object and then broadcast a GameResponse
+ * to the Atmosphere Resource with the id "/game/{id}" ({id} = the UUID).
+ * 
  * @author pigmassacre
  */
 @Path("/game")
@@ -67,7 +80,7 @@ public class GameResource {
      * This UUID is then broadcast to /player/{name}, where {name} is the name
      * of either player.
      * 
-     * Make sure to subscribe to /player/{name} in order to get the UUID which
+     * Clients must make sure to subscribe to /player/{name} in order to get the UUID which
      * can then be used to communicate with the new GameSession.
      * 
      * @param size the size of the gameboard to be created
@@ -93,10 +106,10 @@ public class GameResource {
                 // Broadcast the UUID to the suspended requests that match both players names.
                 BroadcasterFactory.getDefault()
                         .lookup(gameSession.getPlayerOne().getName())
-                        .broadcast(new UUIDMessage(uuid.toString(), size, gameSession.getActivePlayer().getName()));
+                        .broadcast(new UUIDResponse(uuid.toString(), size, gameSession.getActivePlayer().getName()));
                 BroadcasterFactory.getDefault()
                         .lookup(gameSession.getPlayerTwo().getName())
-                        .broadcast(new UUIDMessage(uuid.toString(), size, gameSession.getActivePlayer().getName()));
+                        .broadcast(new UUIDResponse(uuid.toString(), size, gameSession.getActivePlayer().getName()));
                 
                 System.out.println("Game found, returning statuscode 200.");
                 return Response.ok().build();
@@ -108,24 +121,25 @@ public class GameResource {
     }
     
     /**
-     * This is where player movements are taken into consideration. 
-     * Broadcasts the state of the game to all clients suspended to the Broadcaster id.
+     * A REST method that allows a client to make a gamemove on a GameSession.
+     * If the move is accepted, t broadcasts the state of the game to all clients
+     * suspended to the Broadcaster "id".
      * 
      * Returns http status code 200 if the request is OK (i.e. the playername matches
      * the player whos turn it is, and the x and y-pos match an empty state of the board).
      * 
-     * Else returns http status code 400.
+     * Otherwise, returns http status code 400.
      * 
      * @param id the Broadcaster to be used to broadcast the state of the game
      * @param gameMessage a JSON object marshaled into a GameMessage object that contains
      * the data with which to make a move with
-     * @return a Response object
+     * @return a Response object (Jersey)
      */
     @POST
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/{id}")
-    public Response broadcastGamestate(@PathParam(value = "id") Broadcaster id, GameMessage gameMessage) {
+    public Response makeGameMove(@PathParam(value = "id") Broadcaster id, GameMessage gameMessage) {
         GameSession gameSession = gameSessionMap.get(id.getID());
         
         System.out.println("For game with UUID " + id.getID() + ", got a gameMessage: " + gameMessage);
@@ -151,13 +165,12 @@ public class GameResource {
             if (successfulMove) {
                 // Broadcast the name of the active player, the state of the board and, if available, the name of the winner.
                 if (gameSession.getWinner() == null) {
-                    // If no winner, we simply say Undecided.
-                    id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), "Undecided"));
+                    id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard()));
                 } else {
-                    // A player has won, so we broadcast a gameresponse to all active connections and then remove the gamesession and id from the
-                    // gameSessionMap.
                     System.out.println(gameSession.getWinner().getName() + " has won! Shutting down this gameSession and broadcaster.");
                     id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), gameSession.getWinner().getName()));
+                    
+                    // The GameSession matching this UUID is over, so we remove it from the gameSessionMap.
                     gameSessionMap.remove(id.getID());
                 }
                 

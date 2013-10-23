@@ -36,7 +36,7 @@ var Game = function () {
 
             gameController.updateGameBoard(json.gameBoard);
 
-            if (json.winner !== "Undecided") {
+            if (typeof(json.winner) !== 'undefined') {
                 if ($.cookie('name') === json.winner) {
                     gameController.gameEnded('you won!!! :)');
                     console.log('you won!!! :)');

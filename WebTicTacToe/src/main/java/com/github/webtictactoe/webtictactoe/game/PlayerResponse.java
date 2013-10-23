@@ -3,7 +3,7 @@ package com.github.webtictactoe.webtictactoe.game;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This is the response sent by the server to the whoever calls PlayerResource.getPlayerInformation().
+ * This is the response sent by the server to whoever calls PlayerResource.getPlayerScore().
  * @author pigmassacre
  */
 @XmlRootElement

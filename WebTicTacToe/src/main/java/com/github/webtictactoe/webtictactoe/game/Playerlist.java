@@ -5,8 +5,8 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This is a list of players that the server broadcasts to all clients connected
- * to /playerlist (the broadcaster with that id).
+ * This is a list of players that the server the is broadcast to
+ * the Atmosphere suspended resource "/playerlist".
  * @author pigmassacre
  */
 @XmlRootElement

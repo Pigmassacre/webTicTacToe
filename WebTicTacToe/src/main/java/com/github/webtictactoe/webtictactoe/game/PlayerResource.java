@@ -39,7 +39,8 @@ public class PlayerResource {
     /**
      * A simple REST-method to receive the current score of the player.
      * 
-     * NOTE: Not currently used clientside...
+     * NOTE: Not currently used client side... Guess I could remove it, but
+     * we did plan on using it, we just didn't have time. It should work just fine!
      * 
      * @param name the name of the player
      * @return information about the player, if there is any
@@ -47,7 +48,7 @@ public class PlayerResource {
     @GET
     @Produces("application/json")
     @Path("/{name}/info")
-    public Response getPlayerInformation(@PathParam(value = "name") String name) {
+    public Response getPlayerScore(@PathParam(value = "name") String name) {
         for (Player player: lobby.getPlayerRegistry().getByName(name)) {
             Integer score = player.getScore();
             return Response
