@@ -25,7 +25,7 @@ We've had some merge problems, so code blame may have shifted inadvertently.
 Some clarifications (everything else should be OK in gitinspector):
 
 * Tests have been written by Anton Westberg.
-* Website design and most javascript code have been made by Emil Eriksson. Some javascript code (most Atmosphere.js stuff) has been written by Olof Karlsson.
+* Website design and most javascript code have been made by Emil Eriksson. Some javascript code (most stuff that has to do with Atmosphere) has been written by Olof Karlsson.
 * GameCanvas.js and all game graphics have been made by Kristofer Yffén.
 * The REST / Atmosphere backend has been written by Olof Karlsson.
 * The model was written by everyone (not everyone has commits to it though).
