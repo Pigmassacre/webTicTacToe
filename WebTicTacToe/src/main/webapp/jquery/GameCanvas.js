@@ -1,5 +1,9 @@
 /* Reveal Pattern
  * 
+ * Takes care of initiating and drawing on the game canvas.
+ * 
+ * @author yffisch
+ * @author emileriksson
  */
 
 

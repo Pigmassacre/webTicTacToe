@@ -70,25 +70,22 @@ public class GameResource {
      * Make sure to subscribe to /player/{name} in order to get the UUID which
      * can then be used to communicate with the new GameSession.
      * 
-     * @param size
-     * @return a UUID that can be used to communicate with the matching gamesession.
+     * @param size the size of the gameboard to be created
+     * @return a UUID that can be used to communicate with the matching gamesession
      */
     @POST
     @Path("/findgame/{size}")
     public Response findGame(@PathParam(value = "size") Integer size) {
         System.out.println("Trying to find a game for " + name + " of size " + size);
+        
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
-            // Take the first matching player.
             Player givenPlayer = player;
             
-            // Find a game.
             GameSession gameSession = lobby.findGame(givenPlayer, size);
             if (gameSession != null) {
-                // Generate a new UUID.
-                UUID uuid = UUID.randomUUID();
-
                 // Map the new gamesession to the new uuid.
+                UUID uuid = UUID.randomUUID();
                 gameSessionMap.put(uuid.toString(), gameSession);
                 
                 System.out.println("Found game for " + gameSession.getPlayerOne() + " and " + gameSession.getPlayerTwo());
@@ -101,12 +98,11 @@ public class GameResource {
                         .lookup(gameSession.getPlayerTwo().getName())
                         .broadcast(new UUIDMessage(uuid.toString(), size, gameSession.getActivePlayer().getName()));
                 
-                // Simply return an OK response, the UUID is broadcast to both relevant players above.
                 System.out.println("Game found, returning statuscode 200.");
                 return Response.ok().build();
             }
         }
-        // Player matching that name not found, something terribly wrong has occured!
+        // Player matching that name not found.
         System.out.println("Game not found, returning statuscode 400.");
         return Response.status(400).build();
     }
@@ -146,16 +142,16 @@ public class GameResource {
         
         // We get the first player matching the name (there should only ever be one anyway).
         for (Player player : lobby.getPlayerRegistry().getByName(name)) {
-            // Take the first matching player.
             Player givenPlayer = player;
-            System.out.println("Mark of " + givenPlayer.getName() + " is: " + gameSession.getMarkForPlayer(givenPlayer));
-            // Try to make a move to the given position with the given player.
-            Boolean successfulMove = gameSession.move(gameMessage.xPos, gameMessage.yPos, givenPlayer);
             
-            // If the move is successful, we convert the new gameboard to a response-friendly format.
+            System.out.println("Mark of " + givenPlayer.getName() + " is: " + gameSession.getMarkForPlayer(givenPlayer));
+            
+            // Try to make a move, if successful, we convert the new gameboard to a response-friendly format.
+            Boolean successfulMove = gameSession.move(gameMessage.xPos, gameMessage.yPos, givenPlayer);
             if (successfulMove) {
                 // Broadcast the name of the active player, the state of the board and, if available, the name of the winner.
                 if (gameSession.getWinner() == null) {
+                    // If no winner, we simply say Undecided.
                     id.broadcast(new GameResponse(gameSession.getActivePlayer().getName(), gameSession.getBoard(), "Undecided"));
                 } else {
                     // A player has won, so we broadcast a gameresponse to all active connections and then remove the gamesession and id from the
@@ -165,7 +161,6 @@ public class GameResource {
                     gameSessionMap.remove(id.getID());
                 }
                 
-                // The move was successful, so we return an OK response.
                 System.out.println("Game move was accepted, returning statuscode 200.");
                 return Response.ok().build();
             }

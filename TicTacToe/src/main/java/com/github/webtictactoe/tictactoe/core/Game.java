@@ -4,14 +4,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
- * Shop is a container for other containers
- * NOTE: Uses Java 1.7
- *
- * @author hajo
+ * This is basically a GameBoard, or a GameInstance if you will.
+ * Has methods to perform moves, and has the logic for deciding
+ * if the game has been won or not (and the Mark that won).
  */
-
-
 public class Game implements IGame {
 
     public enum Mark {

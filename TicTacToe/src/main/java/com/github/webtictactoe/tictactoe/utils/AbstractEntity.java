@@ -3,7 +3,6 @@ package com.github.webtictactoe.tictactoe.utils;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -11,6 +10,7 @@ import javax.persistence.MappedSuperclass;
  * Originally was AbstractEntity from Hajos shop model.
  * Base class for all entities: Players etc.
  * @author hajo
+ * @author pigmassacre
  */
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {

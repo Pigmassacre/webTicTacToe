@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This is the main class of the model. The WebApp uses the LobbyFactory
+ * to create an instance of the lobby (as a singleton, see Lobby.java in the WebApp).
+ * 
+ * This class provides methods to access everything the WebApp needs.
+ * 
  * @author emileriksson
  */
 public class Lobby implements ILobby {

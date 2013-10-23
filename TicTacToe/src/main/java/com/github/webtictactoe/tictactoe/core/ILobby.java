@@ -3,8 +3,8 @@ package com.github.webtictactoe.tictactoe.core;
 import java.util.List;
 
 /**
- * Public interface for the shop
- * @author hajo
+ * Public interface for the Lobby.
+ * @author hajo (from shop model)
  */
 public interface ILobby {
     

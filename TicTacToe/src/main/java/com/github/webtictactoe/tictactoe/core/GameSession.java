@@ -8,7 +8,11 @@ import com.github.webtictactoe.tictactoe.core.Game.Mark;
 import java.util.HashMap;
 
 /**
- *
+ * This wraps two Player objects (player one and player two) to
+ * a Game object, and provides methods to perform game moves
+ * and access relevant information (the winner, the active player
+ * the mark of each player etc).
+ * 
  * @author emileriksson
  * @author pigmassacre
  */

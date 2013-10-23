@@ -10,7 +10,7 @@ import com.github.webtictactoe.tictactoe.core.LobbyFactory;
  * Usage: Lobby.INSTANCE.getLobby() returns an ILobby object that allows
  * access to the model-Lobby methods.
  * 
- * @author pigmassacre
+ * @author pigmassacre (original author hajo, shamelessly stolen from shop model)
  */
 public enum Lobby {
     INSTANCE;

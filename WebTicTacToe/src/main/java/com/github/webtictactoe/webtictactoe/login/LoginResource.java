@@ -31,6 +31,7 @@ public class LoginResource {
     public Response login(LoginMessage loginMessage) {
         System.out.println("login() called with data: " + loginMessage.name + " / " + loginMessage.password);
         
+        // Checks for "null" as a string because of issues with javascript and cookies...
         if (!loginMessage.name.isEmpty() && !loginMessage.name.equals("null") 
                 && !loginMessage.password.isEmpty() && !loginMessage.password.equals("null")) {
             // As long as the name and password aren't empty, we try to login.

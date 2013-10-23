@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * All players.
+ * All players. Provides some useful methods to access Players from the database.
  *
  * @author hajo
  * @author pigmassacre

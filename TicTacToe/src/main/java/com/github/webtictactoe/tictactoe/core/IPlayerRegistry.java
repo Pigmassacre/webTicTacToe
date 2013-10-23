@@ -4,8 +4,9 @@ import com.github.webtictactoe.tictactoe.utils.IDAO;
 import java.util.List;
 
 /**
- * Interface to customer registry
+ * Interface to player registry
  * @author hajo
+ * @author pigmassacre (still mostly hajo :P)
  */
 public interface IPlayerRegistry extends IDAO<Player, String> {
 

@@ -1,10 +1,6 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Event initiation, basically.
  */
-var debug = false;
-
-
 
 $(function () {
     "use strict";
@@ -28,7 +24,9 @@ $(function () {
     
     
     
-    /* FUUUULT */
+    /* 
+     * A workaround for a mouseclick issue.
+     */
     var isDown = false;
     $('canvas').on('mousedown', function (e) {
         if (isDown === false) {
