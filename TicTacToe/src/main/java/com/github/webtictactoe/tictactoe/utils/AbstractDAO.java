@@ -7,13 +7,13 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
- * A container for entities, base class for PlayerRegistry.
+ * A container for entities.
  * The fundamental common operations are here (CRUD).
  *
  * T is type for items in container K is type of id (primary key)
  *
  * @author hajo (original skeleton code from labs)
- * @author pigmassacre
+ * @author pigmassacre (code taken from completed lab)
  */
 public abstract class AbstractDAO<T, K> implements IDAO<T, K> {
 

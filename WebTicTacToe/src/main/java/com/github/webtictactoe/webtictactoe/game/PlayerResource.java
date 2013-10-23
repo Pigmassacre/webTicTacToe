@@ -18,7 +18,7 @@ import org.atmosphere.jersey.Broadcastable;
 /**
  * This is the resource where players receive their notifications that
  * a game has been found for them. Players subscribe to this resource
- * and then GameResource.findGame() broadcasts to this resource when
+ * and then GameResource. findGame() broadcasts to this resource when
  * a game has been found.
  * @author pigmassacre
  */

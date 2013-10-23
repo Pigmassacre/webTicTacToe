@@ -27,15 +27,14 @@ import org.atmosphere.jersey.Broadcastable;
  * It maps UUID's to GameSession objects, and allows the client-side to basically
  * play the game.
  * 
- * The idea is basically that every client subscribe to an Atmosphere "Resource"
- * with the id "/player/{name}", where {name} is the name of that Player. The findGame
- * method when called will then (if the findGame request is successful I.E. there were enough players
- * online to create a new GameSession) broadcast an UUIDResponse to the Atmosphere Resources 
- * that match each players names ("/player/playeronename" etc).
+ * The idea is basically that every client/player subscribes to an Atmosphere Broadcaster
+ * with the id "/player/{name}", where {name} is the name of that player. The findGame
+ * method when called will then, if successful, broadcast an UUIDResponse to the
+ * relevant clients.
  * 
- * Now, when each client has the same UUID, they can use that UUID to call the makeGameMove method
- * which takes care of calling .move() on the matching GameSession object and then broadcast a GameResponse
- * to the Atmosphere Resource with the id "/game/{id}" ({id} = the UUID).
+ * Now, when each client has the same UUID, they can use that UUID to call the makeGameMove method.
+ * This method takes care of handling the GameSession matching the UUID, and then broadcasts
+ * the result of the move (if the move was permitted) to the two clients in the GameSession.
  * 
  * @author pigmassacre
  */
@@ -121,14 +120,14 @@ public class GameResource {
     }
     
     /**
-     * A REST method that allows a client to make a gamemove on a GameSession.
-     * If the move is accepted, t broadcasts the state of the game to all clients
-     * suspended to the Broadcaster "id".
+     * A REST method that allows a client to make a game move on a GameSession.
+     * If the move is accepted, it broadcasts the state of the game using the Broadcaster
+     * given by the id PathParam.
      * 
-     * Returns http status code 200 if the request is OK (i.e. the playername matches
-     * the player whos turn it is, and the x and y-pos match an empty state of the board).
+     * Returns HTTP status code 200 if the request is OK (i.e. the player name matches
+     * the player who's turn it is, and the x and y-positions match an empty state of the board).
      * 
-     * Otherwise, returns http status code 400.
+     * Otherwise, returns HTTP status code 400.
      * 
      * @param id the Broadcaster to be used to broadcast the state of the game
      * @param gameMessage a JSON object marshaled into a GameMessage object that contains

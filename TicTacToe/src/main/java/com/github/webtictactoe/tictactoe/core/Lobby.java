@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.github.webtictactoe.tictactoe.core;
 
 import java.util.ArrayList;
@@ -29,11 +26,11 @@ public class Lobby implements ILobby {
     @Override
     public Boolean register(String name, String password){
         if (playerRegistry.find(name) == null) {
-            // If the name doesn't already exist, we create a new player and add it to the registry.
+
             playerRegistry.add(new Player(name, password));
             return true;
         }
-        // Else, if the name already exists, we return false.
+        // Cannot register a new player because a player with that name already exists.
         return false;
     }
     
@@ -47,7 +44,7 @@ public class Lobby implements ILobby {
             }
             return true;
         }
-        // We return false if the login fails for any reason.
+        // Name and / or password didn't match any player.
         return false;
     }
     
@@ -59,7 +56,7 @@ public class Lobby implements ILobby {
             onlinePlayerList.remove(p);
             return true;
         }
-        // We return false if the logout fails for any reason.
+        // Cannot logout a player that isn't in the onlinePlayerList.
         return false;
     }
     
@@ -79,8 +76,8 @@ public class Lobby implements ILobby {
     }
     
     /**
-     * findGame creates a game and
-     * forces another player to join p1 and something
+     * Creates a game, then a GameSession that maps
+     * that game to two players.
      * @param p1 player that want to join a game
      * @param size Size of the board
      */

@@ -38,7 +38,7 @@ public class Player extends AbstractEntity {
         this.score = score;
     }
     
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
